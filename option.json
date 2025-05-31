@@ -1,0 +1,229 @@
+{
+    "DefaultParserConfigs": [
+        [
+            "epaper.thehindu.com",
+            {
+                "contentCss": "div.article-container",
+                "titleCss": "",
+                "removeCss": "",
+                "testUrl": "https://epaper.thehindu.com/reader"
+            }
+        ],
+        [
+            "www.wikiwand.com",
+            {
+                "contentCss": "body",
+                "titleCss": "",
+                "removeCss": "nav, div.minimized-ai",
+                "testUrl": "https://www.wikiwand.com/en/articles/List_of_landmark_court_decisions_in_India"
+            }
+        ],
+        [
+            "frontline.thehindu.com",
+            {
+                "contentCss": "div.storyline",
+                "titleCss": "",
+                "removeCss": "ul.slide-mobile,div.related-topics, div.related-stories, div.comments-shares, p.publish-time, div.author, div.author-name",
+                "testUrl": "https://frontline.thehindu.com/world-affairs/ceasefire-israel-hamas-war-geopolitical-shift-hezbollah-palestine-gaza-west-asia/article69293453.ece"
+            }
+        ],
+        [
+            "www.thehindu.com",
+            {
+                "contentCss": "div.storyline, div.editorial, div.opinion, div.columns, div.author-name",
+                "titleCss": "",
+                "removeCss": "div.related-topics, div.related-stories, p.caption,div.author, div.update-publish-time, div.comments-shares",
+                "testUrl": "https://www.thehindu.com/opinion"
+            }
+        ],
+        [
+            "www.drishtiias.com",
+            {
+                "contentCss": "article",
+                "titleCss": "",
+                "removeCss": "",
+                "testUrl": "https://www.drishtiias.com/current-affairs-news-analysis-editorials/news-analysis/22-03-2025"
+            }
+        ],
+        [
+            "economictimes.indiatimes.com",
+            {
+                "contentCss": "div.main_container",
+                "titleCss": "",
+                "removeCss": "",
+                "testUrl": "https://economictimes.indiatimes.com/prime/investment-ideas"
+            }
+        ],
+        [
+            "epaper.indiatimes.com",
+            {
+                "contentCss": "body",
+                "titleCss": "",
+                "removeCss": "",
+                "testUrl": "https://epaper.indiatimes.com/english-news-paper-today-toi-print-edition/22nd-march-2025?tophead=epaper"
+            }
+        ],
+        [
+            "www.notion.so",
+            {
+                "contentCss": "div.opinion, div.storyline, div.editorial, div.author-name",
+                "titleCss": "",
+                "removeCss": "div.related-stories, div.related-topics, ul.slide-mobile",
+                "testUrl": "https://www.notion.so/ajaykr/Latest-Issue-Current-Issue-Frontline-Magazine-Frontline-1c1c61da385681bcb2bce4fe47f63e1e"
+            }
+        ],
+        [
+            "ajaykr.notion.site",
+            {
+                "contentCss": "body",
+                "titleCss": "",
+                "removeCss": "",
+                "testUrl": "https://ajaykr.notion.site/002-2-Preferences-and-Utility-Functions-1c7c61da3856817983d4c042c76b9fbd"
+            }
+        ],
+        [
+            "chatgpt.com",
+            {
+                "contentCss": "body",
+                "titleCss": "",
+                "removeCss": "",
+                "testUrl": ""
+            }
+        ],
+        [
+            "edurev.in",
+            {
+                "contentCss": "div.contentDisplayFrame",
+                "titleCss": "",
+                "removeCss": "div.otr_opn_mb, div.next_rel_cnt_div,div.cont_faqs_before, div.content_footer, div.ed_question",
+                "testUrl": "https://edurev.in/t/396103/Ethics-February-2025-UPSC-Current-Affairs/#course_12112"
+            }
+        ]
+    ],
+    "ReadingList": {
+        "epubs": []
+    },
+    "removeDuplicateImages": false,
+    "includeImageSourceUrl": false,
+    "higestResolutionImages": true,
+    "unSuperScriptAlternateTranslations": false,
+    "styleSheet": "div.svg_outer {\n   display: block;\n   margin-bottom: 0;\n   margin-left: 0;\n   margin-right: 0;\n   margin-top: 0;\n   padding-bottom: 0;\n   padding-left: 0;\n   padding-right: 0;\n   padding-top: 0;\n   text-align: left;\n}\ndiv.svg_inner {\n   display: block;\n   text-align: center;\n} \na {\n  text-decoration: none;\n    color: inherit;\n    pointer-events: none;\n}\nh1 {\n   text-align: justify;\n   margin-bottom: 2%;\n   font-size: 18px;\n   font: serif;\n   text-decoration: none;\n   border-bottom: 2px solid black;\n   padding-bottom: 2px;\n}\nh2 {\n   font-size: 15px;\n   font: serif;\n   font-weight: normal;\n}\nh3, h4, h5, h6 {\n   text-align: justify;\n   font-size: 16px;\n   font: serif;\n   font-weight: bolder;\n}\n\np {\n  overflow-wrap: break-word;\n}\ndd, dt, dl {\n  padding: 0;\n  margin: 0;\n}\nimg {\n   display: block;\n   min-height: 1em;\n   max-height: 100%;\n   max-width: 100%;\n   padding-bottom: 0;\n   padding-left: 0;\n   padding-right: 0;\n   padding-top: 0;\n   margin-left: auto;\n   margin-right: auto;\n   margin-bottom: 2%;\n   margin-top: 2%;\n}\nimg.inline {\n   display: block;\n   min-height: 1em;\n   margin-bottom: 0;\n   margin-top: 0;\n}\n.thumbcaption {\n  display: block;\n  font-size: 0.9em;\n  padding-right: 5%;\n  padding-left: 5%;\n}\nhr {\n   color: black;\n   background-color: black;\n   height: 2px;\n}\ntable {\n   width: 90%;\n   border-collapse: collapse;\n}\ntable, th, td {\n   border: 1px solid black;\n}\n.webToEpub-author-note {\n    border: 1px solid black; padding: 0.5em\n}",
+    "useSvgForImages": true,
+    "advancedOptionsVisibleByDefault": false,
+    "noDownloadPopup": false,
+    "writeErrorHistoryToFile": false,
+    "createEpub3": true,
+    "chaptersPageInChapterList": true,
+    "autoSelectBTSeriesPage": false,
+    "removeAuthorNotes": false,
+    "removeOriginal": true,
+    "maxPagesToFetchSimultaneously": "8",
+    "skipChaptersThatFailFetch": true,
+    "maxChaptersPerEpub": "10,000",
+    "manualDelayPerChapter": "3000",
+    "overrideMinimumDelay": true,
+    "skipImages": true,
+    "overwriteExistingEpub": false,
+    "themeColor": "",
+    "useFullTitle": false,
+    "addInformationPage": true,
+    "lesstags": true,
+    "autosearchmetadata": false,
+    "noAdditionalMetadata": true,
+    "LibShowAdvancedOptions": false,
+    "LibDownloadEpubAfterUpdate": false
+}
+
+
+div.svg_outer {
+   display: block;
+   margin-bottom: 0;
+   margin-left: 0;
+   margin-right: 0;
+   margin-top: 0;
+   padding-bottom: 0;
+   padding-left: 0;
+   padding-right: 0;
+   padding-top: 0;
+   text-align: left;
+}
+div.svg_inner {
+   display: block;
+   text-align: center;
+} 
+a {
+  text-decoration: none;
+    color: inherit;
+    pointer-events: none;
+}
+h1 {
+   text-align: justify;
+   margin-bottom: 2%;
+   font-size: 18px;
+   font: serif;
+   text-decoration: none;
+   border-bottom: 2px solid black;
+   padding-bottom: 2px;
+}
+h2 {
+   font-size: 15px;
+   font: serif;
+   font-weight: normal;
+}
+h3, h4, h5, h6 {
+   text-align: justify;
+   font-size: 16px;
+   font: serif;
+   font-weight: bolder;
+}
+
+p {
+  overflow-wrap: break-word;
+}
+dd, dt, dl {
+  padding: 0;
+  margin: 0;
+}
+img {
+   display: block;
+   min-height: 1em;
+   max-height: 100%;
+   max-width: 100%;
+   padding-bottom: 0;
+   padding-left: 0;
+   padding-right: 0;
+   padding-top: 0;
+   margin-left: auto;
+   margin-right: auto;
+   margin-bottom: 2%;
+   margin-top: 2%;
+}
+img.inline {
+   display: block;
+   min-height: 1em;
+   margin-bottom: 0;
+   margin-top: 0;
+}
+.thumbcaption {
+  display: block;
+  font-size: 0.9em;
+  padding-right: 5%;
+  padding-left: 5%;
+}
+hr {
+   color: black;
+   background-color: black;
+   height: 2px;
+}
+table {
+   width: 90%;
+   border-collapse: collapse;
+}
+table, th, td {
+   border: 1px solid black;
+}
+.webToEpub-author-note {
+    border: 1px solid black; padding: 0.5em
+}
+
+border-bg
