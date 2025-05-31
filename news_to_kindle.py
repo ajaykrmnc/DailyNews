@@ -6,6 +6,7 @@ from datetime import datetime
 import subprocess
 import hashlib
 
+
 KINDLE_EMAIL = os.environ["KINDLE_EMAIL"]
 SMTP_SERVER = os.environ["SMTP_SERVER"]
 SMTP_PORT = os.environ["SMTP_PORT"]
@@ -45,14 +46,16 @@ def fetch_and_convert_to_html():
         img["class"] = "inline"
         img["style"] = "display: block; margin-left: auto; margin-right: auto;"
     for a in content_div.find_all("a"):
-        new_p = soup.new_tag("p")
-        new_p.string = a.get_text(strip=True)
-        a.replace_with(new_p)
+        a["style"] = "text-decoration: none; pointer-events: none; color: black;"
+        a["href"] = None  # Disable links
     for h in content_div.find_all(["h1", "h2", "h3", "h4", "h5", "h6"]):
         pass
     for ifram in content_div.find_all("iframe"):
+        # remove it
         ifram.decompose()
-
+    for hr in content_div.find_all("hr"):
+        hr.decompose()
+    
     css = """
     <style>
         h1 {
@@ -70,7 +73,8 @@ def fetch_and_convert_to_html():
             text-align: justify;
             font-size: 18px;
         }
-        a {
+        p {
+         
          text-decoration: none;
         }
         dd, dt, dl {
