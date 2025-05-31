@@ -1,15 +1,12 @@
 import os
 import requests
 from bs4 import BeautifulSoup
-from bs4 import Tag
 from datetime import datetime
 import subprocess
-import hashlib
 
 
 KINDLE_EMAIL = os.environ["KINDLE_EMAIL"]
 SMTP_SERVER = os.environ["SMTP_SERVER"]
-SMTP_PORT = os.environ["SMTP_PORT"]
 SMTP_USERNAME = os.environ["SMTP_USERNAME"]
 SMTP_PASSWORD = os.environ["SMTP_PASSWORD"]
 FROM_EMAIL = os.environ["FROM_EMAIL"]
@@ -151,14 +148,14 @@ def fetch_and_convert_to_html():
 
 def convert_html_to_epub(output_path=None):
     epub_path = output_path if output_path else EPUB_FILE
-    subprocess.run(["/Applications/calibre.app/Contents/MacOS/ebook-convert", HTML_FILE, epub_path], check=True)
+    subprocess.run(["/usr/bin/ebook-convert", HTML_FILE, epub_path], check=True)
     print(f"EPUB saved at: {os.path.abspath(epub_path)}")
 
 
 def send_to_kindle():
     subprocess.run([
-        "calibre-smtp",
-        "--port", SMTP_PORT,
+        "usr/bin/calibre-smtp",
+        "--port", "587",
         "--encryption-method", "TLS",
         "--username", SMTP_USERNAME,
         "--password", SMTP_PASSWORD,
@@ -171,4 +168,4 @@ def send_to_kindle():
 if __name__ == "__main__":
     fetch_and_convert_to_html()
     convert_html_to_epub()
-    # send_to_kindle()
+    send_to_kindle()

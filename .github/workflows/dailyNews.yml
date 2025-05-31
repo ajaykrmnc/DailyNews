@@ -28,8 +28,8 @@ jobs:
       env:
         KINDLE_EMAIL: ${{ secrets.KINDLE_EMAIL }}
         SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
-        SMTP_PORT: ${{ secrets.SMTP_PORT }}
+        SMTP_PORT: 587
         SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
         SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-        FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
+        FROM_EMAIL: "ajaykg6917@gmail.com"
       run: python send_daily_to_kindle.py
