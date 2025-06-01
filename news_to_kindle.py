@@ -159,6 +159,8 @@ def send_to_kindle():
         result = subprocess.run([
             "/usr/bin/calibre-smtp",
             "--port", "587",
+            "--attachement", EPUB_FILE,
+            "--subject", f"Prelims Pointers - {DATE}",
             "--encryption-method", "TLS",
             "--relay", SMTP_SERVER,
             "--username", SMTP_USERNAME,
