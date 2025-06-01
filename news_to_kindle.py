@@ -153,16 +153,28 @@ def convert_html_to_epub(output_path=None):
 
 
 def send_to_kindle():
-    subprocess.run([
-        "/usr/bin/calibre-smtp",
-        "--port", "587",
-        "--encryption-method", "TLS",
-        "--username", SMTP_USERNAME,
-        "--password", SMTP_PASSWORD,
-        FROM_EMAIL,
-        KINDLE_EMAIL,
-        EPUB_FILE
-    ], check=True)
+    assert os.path.exists(EPUB_FILE), f"{EPUB_FILE} not found!"
+
+    try:
+        result = subprocess.run([
+            "/usr/bin/calibre-smtp",
+            "--port", "587",
+            "--encryption-method", "TLS",
+            "--relay", SMTP_SERVER,
+            "--username", SMTP_USERNAME,
+            "--password", SMTP_PASSWORD,
+            FROM_EMAIL,
+            KINDLE_EMAIL,
+            EPUB_FILE
+        ], check=True, capture_output=True, text=True)
+
+        print("✅ Email sent to Kindle successfully!")
+        print(result.stdout)
+
+    except subprocess.CalledProcessError as e:
+        print("❌ Failed to send email to Kindle.")
+        print("Error Output:", e.stderr)
+        raise
 
 
 if __name__ == "__main__":
