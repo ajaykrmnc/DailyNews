@@ -32,4 +32,5 @@ jobs:
         SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
         SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
         FROM_EMAIL: "ajaykg6917@gmail.com"
-      run: python send_daily_to_kindle.py
+        # python: can't open file '/home/runner/work/DailyNews/DailyNews/send_daily_to_kindle.py': [Errno 2] No such file or directory
+      run: python news_to_kindle.py
