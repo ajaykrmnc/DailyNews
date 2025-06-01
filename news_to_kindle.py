@@ -154,7 +154,7 @@ def convert_html_to_epub(output_path=None):
 
 def send_to_kindle():
     subprocess.run([
-        "usr/bin/calibre-smtp",
+        "/usr/bin/calibre-smtp",
         "--port", "587",
         "--encryption-method", "TLS",
         "--username", SMTP_USERNAME,
