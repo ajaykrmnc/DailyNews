@@ -175,9 +175,9 @@ def fetch_through_gemini():
         "- 1 essay for UPSC preparation in paragraph on current affairs\n"
         "- 1 historical incident related to India and the world\n"
         "- 5 thoughts to ponder related to philoshpy or may be quote from any book so give me a book review\n"
-        "- 1 Gita paragraph based on today nth day of year so it must be nth paragraph according to index such that I get daily unique paragraph"
+        "- 1 Gita paragraph based on today nth day of year so it must be nth paragraph according to index such that I get daily unique paragraph you don't have to exact"
         "- 5 advanced English vocabulary words (with meanings)\n"
-        "- Let suppose it's the nth day of the year and find the nth leetcode question and solution in c++ with a little explanation"
+        "- Let suppose it's the nth day of the year and find the nth leetcode question and class solution with leetcode format in c++ without headers with a little explanation"
         "Ensure the content is fresh, unique, and relevant to today's date. Format the response clearly and engagingly."
     )
 
