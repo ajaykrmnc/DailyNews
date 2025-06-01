@@ -3,17 +3,24 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 import subprocess
-
+import google.generativeai as genai
+import subprocess
+import os
+from dotenv import load_dotenv
+from datetime import datetime
+load_dotenv()
 
 KINDLE_EMAIL = os.environ["KINDLE_EMAIL"]
 SMTP_SERVER = os.environ["SMTP_SERVER"]
 SMTP_USERNAME = os.environ["SMTP_USERNAME"]
 SMTP_PASSWORD = os.environ["SMTP_PASSWORD"]
 FROM_EMAIL = os.environ["FROM_EMAIL"]
+GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 
 DATE = datetime.today().strftime('%d-%b-%Y')
 URL = f"https://www.drishtiias.com/current-affairs-news-analysis-editorials/news-analysis/{DATE}/"
 EPUB_FILE = f"Prelims_Pointers_{DATE}.epub"
+EPUB_FILE2 = f"Daily_News_{DATE}.epub"
 HTML_FILE = f"prelims_{DATE}.html"
 
 
@@ -148,36 +155,72 @@ def fetch_and_convert_to_html():
 
 def convert_html_to_epub(output_path=None):
     epub_path = output_path if output_path else EPUB_FILE
-    subprocess.run(["/usr/bin/ebook-convert", HTML_FILE, epub_path], check=True)
+    subprocess.run(["/Applications/calibre.app/Contents/MacOS/ebook-convert", HTML_FILE, epub_path], check=True)
     print(f"EPUB saved at: {os.path.abspath(epub_path)}")
+
+def fetch_through_gemini():
+    genai.configure(api_key=GEMINI_API_KEY)
+    model = genai.GenerativeModel("gemini-2.0-flash")
+
+    today = datetime.now().strftime("%Y-%m-%d")
+
+    prompt = (
+        f"Today is {today}.\n"
+        "Compose a message to start the day that includes:\n"
+        "- 10-15 top news across world for Indian people in detail\n"
+        "- 1 essay for UPSC preparation relevant to current scenerio\n"
+        "- 1 historical incident related to India and the world\n"
+        "- 5 thoughts to ponder related to philoshpy or may be quote from any book so give me a book review\n"
+        "- 1 Gita paragraph based on today nth day of year so it must be nth paragraph according to index such that I get daily unique paragraph"
+        "- 5 advanced English vocabulary words (with meanings)\n"
+        "- Let suppose it's the nth day of the year and find the nth leetcode question and solution in c++ with a little explanation"
+        "Ensure the content is fresh, unique, and relevant to today's date. Format the response clearly and engagingly."
+    )
+
+    response = model.generate_content(prompt)
+    filename = f"motivational_message_{today}.md"
+    calibre_path = "/Applications/calibre.app/Contents/MacOS/ebook-convert"
+
+
+    def convert_html_to_epub(output_path=None):
+        epub_path = output_path if output_path else EPUB_FILE2
+        subprocess.run([calibre_path, filename, epub_path], check=True)
+        print(f"EPUB saved at: {os.path.abspath(epub_path)}")
+
+    with open(filename, "w", encoding="utf-8") as f:
+        f.write(response.text)
+
+    convert_html_to_epub()
+
 
 
 def send_to_kindle():
     assert os.path.exists(EPUB_FILE), f"{EPUB_FILE} not found!"
 
-    try:
-        result = subprocess.run([
-            "/usr/bin/calibre-smtp",
-            "--port", "587",
-            "--attachment", EPUB_FILE,
-            "--relay", SMTP_SERVER,
-            "--username", SMTP_USERNAME,
-            "--password", SMTP_PASSWORD,
-            FROM_EMAIL,
-            KINDLE_EMAIL,
-            EPUB_FILE
-        ], check=True, capture_output=True, text=True)
+    kindle_emails = ["pramodshah@kindle.com", "amritacs5566@gmail.com", "amankumarnetarhatiyan@gmail.com"]
+    epubs = [EPUB_FILE, EPUB_FILE2]
 
-        print("✅ Email sent to Kindle successfully!")
-        print(result.stdout)
-
-    except subprocess.CalledProcessError as e:
-        print("❌ Failed to send email to Kindle.")
-        print("Error Output:", e.stderr)
-        raise
-
+    for epub_file in epubs:
+        for email in kindle_emails:
+            try:
+                result = subprocess.run([
+                    "/Applications/calibre.app/Contents/MacOS/calibre-smtp",
+                    "--port", "587",
+                    "--attachment", epub_file,
+                    "--relay", SMTP_SERVER,
+                    "--username", SMTP_USERNAME,
+                    "--password", SMTP_PASSWORD,
+                    FROM_EMAIL,
+                    email,
+                    epub_file
+                ], check=True, capture_output=True, text=True)
+                print(f"✅ Email sent to Kindle: {email}")
+            except subprocess.CalledProcessError as e:
+                print(f"❌ Failed to send email to Kindle: {email}")
+                print("Error Output:", e.stderr)
 
 if __name__ == "__main__":
     fetch_and_convert_to_html()
     convert_html_to_epub()
+    fetch_through_gemini()
     send_to_kindle()
