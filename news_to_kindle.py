@@ -16,6 +16,7 @@ SMTP_USERNAME = os.environ["SMTP_USERNAME"]
 SMTP_PASSWORD = os.environ["SMTP_PASSWORD"]
 FROM_EMAIL = os.environ["FROM_EMAIL"]
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
+CALIBRE_PATH = os.environ["CALIBRE_PATH"]
 
 DATE = datetime.today().strftime('%d-%b-%Y')
 URL = f"https://www.drishtiias.com/current-affairs-news-analysis-editorials/news-analysis/{DATE}/"
@@ -155,7 +156,10 @@ def fetch_and_convert_to_html():
 
 def convert_html_to_epub(output_path=None):
     epub_path = output_path if output_path else EPUB_FILE
-    subprocess.run(["/Applications/calibre.app/Contents/MacOS/ebook-convert", HTML_FILE, epub_path], check=True)
+    print(CALIBRE_PATH);
+    full_calibre_path = f"{CALIBRE_PATH}/ebook-convert"
+    print(full_calibre_path)
+    subprocess.run([full_calibre_path, HTML_FILE, epub_path], check=True)
     print(f"EPUB saved at: {os.path.abspath(epub_path)}")
 
 def fetch_through_gemini():
@@ -168,7 +172,7 @@ def fetch_through_gemini():
         f"Today is {today}.\n"
         "Compose a message to start the day that includes:\n"
         "- 10-15 top news across world for Indian people in detail\n"
-        "- 1 essay for UPSC preparation relevant to current scenerio\n"
+        "- 1 essay for UPSC preparation in paragraph on current affairs\n"
         "- 1 historical incident related to India and the world\n"
         "- 5 thoughts to ponder related to philoshpy or may be quote from any book so give me a book review\n"
         "- 1 Gita paragraph based on today nth day of year so it must be nth paragraph according to index such that I get daily unique paragraph"
@@ -179,9 +183,9 @@ def fetch_through_gemini():
 
     response = model.generate_content(prompt)
     filename = f"motivational_message_{today}.md"
-    calibre_path = "/Applications/calibre.app/Contents/MacOS/ebook-convert"
+    calibre_path = f"{CALIBRE_PATH}/ebook-convert"
 
-
+    print(calibre_path)
     def convert_html_to_epub(output_path=None):
         epub_path = output_path if output_path else EPUB_FILE2
         subprocess.run([calibre_path, filename, epub_path], check=True)
@@ -199,12 +203,12 @@ def send_to_kindle():
 
     kindle_emails = ["pramodshah@kindle.com", "amritacs5566@gmail.com", "amankumarnetarhatiyan@gmail.com"]
     epubs = [EPUB_FILE, EPUB_FILE2]
-
+    full_path = f"{CALIBRE_PATH}/calibre-smtp"
     for epub_file in epubs:
         for email in kindle_emails:
             try:
                 result = subprocess.run([
-                    "/Applications/calibre.app/Contents/MacOS/calibre-smtp",
+                    full_path,
                     "--port", "587",
                     "--attachment", epub_file,
                     "--relay", SMTP_SERVER,
