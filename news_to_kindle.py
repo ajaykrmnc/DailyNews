@@ -8,6 +8,7 @@ import subprocess
 import os
 from dotenv import load_dotenv
 from datetime import datetime
+from datetime import timedelta
 load_dotenv()
 
 KINDLE_EMAIL = os.environ["KINDLE_EMAIL"]
@@ -19,7 +20,8 @@ GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 CALIBRE_PATH = os.environ["CALIBRE_PATH"]
 
 DATE = datetime.today().strftime('%d-%b-%Y')
-URL = f"https://www.drishtiias.com/current-affairs-news-analysis-editorials/news-analysis/{DATE}/"
+YESTERDAY = (datetime.now() - timedelta(days=1)).strftime("%d-%m-%Y")
+URL = f"https://www.drishtiias.com/current-affairs-news-analysis-editorials/news-analysis/{YESTERDAY}/"
 EPUB_FILE = f"Prelims_Pointers_{DATE}.epub"
 EPUB_FILE2 = f"Daily_News_{DATE}.epub"
 HTML_FILE = f"prelims_{DATE}.html"
@@ -34,8 +36,7 @@ def fetch_and_convert_to_html():
     content_div = soup.find("div", class_="list-category")
     if not content_div:
         raise Exception("Failed to find expected content on the page.")
-   
-    
+
     exclude_classes = {
         "border-bg", "tags-new", "mobile-ad-banner", "desktop-ad-banner",
         "starRating", "social-shares", "next-post", "recommendations-layout"
@@ -61,49 +62,10 @@ def fetch_and_convert_to_html():
     for hr in content_div.find_all("hr"):
         hr.decompose()
     
+    
     css = """
     <style>
-        h1 {
-            text-align: justify;
-            margin-bottom: 2%;
-            font-size: 24px;
-            text-decoration: none;
-            border-bottom: 2px solid black;
-            padding-bottom: 2px;
-        }
-        h2 {
-            font-size: 20px;
-        }
-        h3, h4, h5, h6 {
-            text-align: justify;
-            font-size: 18px;
-        }
-        p {
-         
-         text-decoration: none;
-        }
-        dd, dt, dl {
-            padding: 0;
-            margin: 0;
-        }
-        .thumbcaption {
-            display: block;
-            font-size: 0.9em;
-            padding-right: 5%;
-            padding-left: 5%;
-        }
-        hr {
-            color: black;
-            background-color: black;
-            height: 2px;
-        }
-        table {
-            width: 90%;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
+
 
     </style>
     """
@@ -159,36 +121,36 @@ def convert_html_to_epub(output_path=None):
     print(CALIBRE_PATH);
     full_calibre_path = f"{CALIBRE_PATH}/ebook-convert"
     print(full_calibre_path)
-    subprocess.run([full_calibre_path, HTML_FILE, epub_path], check=True)
+    subprocess.run([full_calibre_path, HTML_FILE, epub_path, "--language", "en", "--title", DATE, "--dont-split-on-page-breaks"], check=True)
     print(f"EPUB saved at: {os.path.abspath(epub_path)}")
 
 def fetch_through_gemini():
     genai.configure(api_key=GEMINI_API_KEY)
     model = genai.GenerativeModel("gemini-2.0-flash")
 
-    today = datetime.now().strftime("%Y-%m-%d")
 
     prompt = (
-        f"Today is {today}.\n"
-        "Compose a message to start the day that includes:\n"
-        "- 10-15 top news across world for Indian people in detail\n"
-        "- 1 essay for UPSC preparation in paragraph on current affairs\n"
+        f"You are an expert news analyst, UPSC mentor, historian, philosopher, and coding instructor. "
+        f"Your role is to create a daily digest for Indian readers preparing for competitive exams.\n"
+        f"Today is {DATE}.\n"
+        "Compose a message to start the day that includes to the point \n"
+        "- 1 essay for UPSC preparation in paragraph on current affairs in about 500-1000 words\n"
         "- 1 historical incident related to India and the world\n"
-        "- 5 thoughts to ponder related to philoshpy or may be quote from any book so give me a book review\n"
-        "- 1 Gita paragraph based on today nth day of year so it must be nth paragraph according to index such that I get daily unique paragraph you don't have to exact"
-        "- 5 advanced English vocabulary words (with meanings)\n"
-        "- Let suppose it's the nth day of the year and find the nth leetcode question and class solution with leetcode format in c++ without headers with a little explanation"
+        "- 5 thoughts to ponder related to philosophy or maybe a quote from any book, so give me a book review; don't give generic but feels special for today\n"
+        "- 1 Gita paragraph based on today nth day of year so it must be nth paragraph according to index such that I get daily unique paragraph; you don't have to be exact but you don't have to explain why you choose that paragraph\n"
+        "- 5 advanced English vocabulary words (with meanings) for SSC CGL\n"
+        "- Let suppose it's the nth day of the year and find the nth leetcode question with pseudo code solution, very little explanation\n"
         "Ensure the content is fresh, unique, and relevant to today's date. Format the response clearly and engagingly."
     )
 
     response = model.generate_content(prompt)
-    filename = f"motivational_message_{today}.md"
+    filename = f"motivational_message_{DATE}.md"
     calibre_path = f"{CALIBRE_PATH}/ebook-convert"
 
     print(calibre_path)
     def convert_html_to_epub(output_path=None):
         epub_path = output_path if output_path else EPUB_FILE2
-        subprocess.run([calibre_path, filename, epub_path], check=True)
+        subprocess.run([calibre_path, filename, epub_path,"--language", "en"], check=True)
         print(f"EPUB saved at: {os.path.abspath(epub_path)}")
 
     with open(filename, "w", encoding="utf-8") as f:
