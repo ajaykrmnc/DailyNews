@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from datetime import datetime
 from datetime import timedelta
 from finance.financeDaily import financeDaily
+from upsc.upscDaily import upscDaily
 import re
 load_dotenv()
 
@@ -24,9 +25,10 @@ CALIBRE_PATH = os.environ["CALIBRE_PATH"]
 DATE = datetime.today().strftime('%d-%b-%Y')
 YESTERDAY = (datetime.now() - timedelta(days=1)).strftime("%d-%m-%Y")
 URL = f"https://www.drishtiias.com/current-affairs-news-analysis-editorials/news-analysis/{YESTERDAY}/"
-EPUB_FILE = f"Prelims_Pointers_{DATE}.epub"
-EPUB_FILE2 = f"Daily_News_{DATE}.epub"
-EPUB_FILE3 = f"Daily_Finance_{DATE}.epub"
+EPUB_FILE = f"Current Affairs-{DATE}.epub"
+EPUB_FILE2 = f"News-{DATE}.epub"
+EPUB_FILE3 = f"Finance-{DATE}.epub"
+EPUB_FILE4 = f"UPSC-{DATE}.epub"
 HTML_FILE = f"prelims_{DATE}.html"
 
 
@@ -136,11 +138,10 @@ def fetch_through_gemini():
         f"Today is {DATE}.\n"
         "Compose a message to start the day that includes to the point \n"
         "- 1 essay for UPSC preparation in paragraph on current affairs in about 500-1000 words\n"
-        "- 1 historical incident related to India and the world\n"
-        "- 1 book review don't give generic book review around 250-500 words\n"
-        "- 1 Gita paragraph based on today nth day of year so it must be nth paragraph according to index such that I get daily unique paragraph; you don't have to be exact but you don't have to explain why you choose that paragraph\n"
-        "- 5 advanced English vocabulary words (with meanings) for SSC CGL\n"
-        "- Let suppose it's the nth day of the year and find the nth leetcode question with pseudo code solution, very little explanation\n"
+        "- 1 book review book and key learnings should be around 250-500 words\n"
+        "- 1 Gita paragraph with explanation based on today nth day of year so it must be nth paragraph according to index such that I get daily unique paragraph; you don't have to be exact but you don't have to explain why you choose that paragraph\n"
+        "- 1 Tech news and concept explanation in about 500 words\n"
+        "- 1 motivational message for the day in about 100 words\n"
         "Ensure the content is fresh, unique, and relevant to today's date. Format the response clearly and engagingly."
     )
 
@@ -165,7 +166,7 @@ def send_to_kindle():
     assert os.path.exists(EPUB_FILE), f"{EPUB_FILE} not found!"
 
     kindle_emails = ["pramodshah@kindle.com"]
-    epubs = [EPUB_FILE, EPUB_FILE2, EPUB_FILE3]
+    epubs = [EPUB_FILE, EPUB_FILE2, EPUB_FILE3, EPUB_FILE4]
     full_path = f"{CALIBRE_PATH}/calibre-smtp"
     for epub_file in epubs:
         for email in kindle_emails:
@@ -191,6 +192,7 @@ if __name__ == "__main__":
     convert_html_to_epub()
     fetch_through_gemini()
     financeDaily(CALIBRE_PATH=CALIBRE_PATH, GEMINI_API_KEY=GEMINI_API_KEY, EPUB_FILE3=EPUB_FILE3)
+    upscDaily(CALIBRE_PATH=CALIBRE_PATH, GEMINI_API_KEY=GEMINI_API_KEY, EPUB_FILE=EPUB_FILE4)
     send_to_kindle()
 
 
