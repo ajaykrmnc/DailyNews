@@ -1,0 +1,366 @@
+Date,Finance Topic
+2025-06-03,Code of Ethics
+2025-06-04,Professional Standards
+2025-06-05,Misconduct
+2025-06-06,Integrity of Capital Markets
+2025-06-07,Duties to Clients
+2025-06-08,Duties to Employers
+2025-06-09,Investment Analysis
+2025-06-10,Conflicts of Interest
+2025-06-11,Responsibilities as CFA Member
+2025-06-12,TVM: Future Value
+2025-06-13,TVM: Present Value
+2025-06-14,Annuities
+2025-06-15,Perpetuities
+2025-06-16,NPV and IRR
+2025-06-17,Descriptive Statistics
+2025-06-18,Probability Concepts
+2025-06-19,Normal Distribution
+2025-06-20,Sampling
+2025-06-21,Hypothesis Testing
+2025-06-22,Demand and Supply
+2025-06-23,Elasticity
+2025-06-24,Market Structures
+2025-06-25,Aggregate Demand/Supply
+2025-06-26,Inflation and Deflation
+2025-06-27,Unemployment
+2025-06-28,Monetary Policy
+2025-06-29,Fiscal Policy
+2025-06-30,Currency Exchange Rates
+2025-07-01,Financial Statements
+2025-07-02,Income Statement
+2025-07-03,Balance Sheet
+2025-07-04,Cash Flow Statement
+2025-07-05,Revenue Recognition
+2025-07-06,Inventory Valuation
+2025-07-07,Depreciation
+2025-07-08,Financial Ratios
+2025-07-09,Leases
+2025-07-10,Taxes
+2025-07-11,Corporate Governance
+2025-07-12,Capital Budgeting
+2025-07-13,Cost of Capital
+2025-07-14,Leverage
+2025-07-15,Working Capital Mgmt
+2025-07-16,Dividend Policy
+2025-07-17,Business Risk
+2025-07-18,Operating Cycle
+2025-07-19,Break-even Analysis
+2025-07-20,Equity Securities
+2025-07-21,Stock Markets
+2025-07-22,Market Indices
+2025-07-23,Market Efficiency
+2025-07-24,Equity Valuation: DDM
+2025-07-25,P/E Ratio
+2025-07-26,Price-to-Book
+2025-07-27,EV/EBITDA
+2025-07-28,Free Cash Flow to Equity
+2025-07-29,Bond Features
+2025-07-30,Time to Maturity
+2025-07-31,Yield Measures
+2025-08-01,Bond Pricing
+2025-08-02,Yield Curve
+2025-08-03,Duration
+2025-08-04,Convexity
+2025-08-05,Credit Risk
+2025-08-06,MBS and ABS
+2025-08-07,Term Structure of Interest Rates
+2025-08-08,Forwards
+2025-08-09,Futures
+2025-08-10,Options
+2025-08-11,Swaps
+2025-08-12,Option Strategies
+2025-08-13,Payoff Diagrams
+2025-08-14,Derivative Pricing Basics
+2025-08-15,Real Estate
+2025-08-16,Hedge Funds
+2025-08-17,Private Equity
+2025-08-18,Commodities
+2025-08-19,Infrastructure
+2025-08-20,Alternative vs Traditional
+2025-08-21,Portfolio Concepts
+2025-08-22,Risk and Return
+2025-08-23,Diversification
+2025-08-24,CAPM
+2025-08-25,Efficient Frontier
+2025-08-26,Portfolio Risk
+2025-08-27,Beta
+2025-08-28,Asset Allocation
+2025-08-29,Performance Evaluation
+2025-08-30,Code of Ethics
+2025-08-31,Professional Standards
+2025-09-01,Misconduct
+2025-09-02,Integrity of Capital Markets
+2025-09-03,Duties to Clients
+2025-09-04,Duties to Employers
+2025-09-05,Investment Analysis
+2025-09-06,Conflicts of Interest
+2025-09-07,Responsibilities as CFA Member
+2025-09-08,TVM: Future Value
+2025-09-09,TVM: Present Value
+2025-09-10,Annuities
+2025-09-11,Perpetuities
+2025-09-12,NPV and IRR
+2025-09-13,Descriptive Statistics
+2025-09-14,Probability Concepts
+2025-09-15,Normal Distribution
+2025-09-16,Sampling
+2025-09-17,Hypothesis Testing
+2025-09-18,Demand and Supply
+2025-09-19,Elasticity
+2025-09-20,Market Structures
+2025-09-21,Aggregate Demand/Supply
+2025-09-22,Inflation and Deflation
+2025-09-23,Unemployment
+2025-09-24,Monetary Policy
+2025-09-25,Fiscal Policy
+2025-09-26,Currency Exchange Rates
+2025-09-27,Financial Statements
+2025-09-28,Income Statement
+2025-09-29,Balance Sheet
+2025-09-30,Cash Flow Statement
+2025-10-01,Revenue Recognition
+2025-10-02,Inventory Valuation
+2025-10-03,Depreciation
+2025-10-04,Financial Ratios
+2025-10-05,Leases
+2025-10-06,Taxes
+2025-10-07,Corporate Governance
+2025-10-08,Capital Budgeting
+2025-10-09,Cost of Capital
+2025-10-10,Leverage
+2025-10-11,Working Capital Mgmt
+2025-10-12,Dividend Policy
+2025-10-13,Business Risk
+2025-10-14,Operating Cycle
+2025-10-15,Break-even Analysis
+2025-10-16,Equity Securities
+2025-10-17,Stock Markets
+2025-10-18,Market Indices
+2025-10-19,Market Efficiency
+2025-10-20,Equity Valuation: DDM
+2025-10-21,P/E Ratio
+2025-10-22,Price-to-Book
+2025-10-23,EV/EBITDA
+2025-10-24,Free Cash Flow to Equity
+2025-10-25,Bond Features
+2025-10-26,Time to Maturity
+2025-10-27,Yield Measures
+2025-10-28,Bond Pricing
+2025-10-29,Yield Curve
+2025-10-30,Duration
+2025-10-31,Convexity
+2025-11-01,Credit Risk
+2025-11-02,MBS and ABS
+2025-11-03,Term Structure of Interest Rates
+2025-11-04,Forwards
+2025-11-05,Futures
+2025-11-06,Options
+2025-11-07,Swaps
+2025-11-08,Option Strategies
+2025-11-09,Payoff Diagrams
+2025-11-10,Derivative Pricing Basics
+2025-11-11,Real Estate
+2025-11-12,Hedge Funds
+2025-11-13,Private Equity
+2025-11-14,Commodities
+2025-11-15,Infrastructure
+2025-11-16,Alternative vs Traditional
+2025-11-17,Portfolio Concepts
+2025-11-18,Risk and Return
+2025-11-19,Diversification
+2025-11-20,CAPM
+2025-11-21,Efficient Frontier
+2025-11-22,Portfolio Risk
+2025-11-23,Beta
+2025-11-24,Asset Allocation
+2025-11-25,Performance Evaluation
+2025-11-26,Code of Ethics
+2025-11-27,Professional Standards
+2025-11-28,Misconduct
+2025-11-29,Integrity of Capital Markets
+2025-11-30,Duties to Clients
+2025-12-01,Duties to Employers
+2025-12-02,Investment Analysis
+2025-12-03,Conflicts of Interest
+2025-12-04,Responsibilities as CFA Member
+2025-12-05,TVM: Future Value
+2025-12-06,TVM: Present Value
+2025-12-07,Annuities
+2025-12-08,Perpetuities
+2025-12-09,NPV and IRR
+2025-12-10,Descriptive Statistics
+2025-12-11,Probability Concepts
+2025-12-12,Normal Distribution
+2025-12-13,Sampling
+2025-12-14,Hypothesis Testing
+2025-12-15,Demand and Supply
+2025-12-16,Elasticity
+2025-12-17,Market Structures
+2025-12-18,Aggregate Demand/Supply
+2025-12-19,Inflation and Deflation
+2025-12-20,Unemployment
+2025-12-21,Monetary Policy
+2025-12-22,Fiscal Policy
+2025-12-23,Currency Exchange Rates
+2025-12-24,Financial Statements
+2025-12-25,Income Statement
+2025-12-26,Balance Sheet
+2025-12-27,Cash Flow Statement
+2025-12-28,Revenue Recognition
+2025-12-29,Inventory Valuation
+2025-12-30,Depreciation
+2025-12-31,Financial Ratios
+2026-01-01,Leases
+2026-01-02,Taxes
+2026-01-03,Corporate Governance
+2026-01-04,Capital Budgeting
+2026-01-05,Cost of Capital
+2026-01-06,Leverage
+2026-01-07,Working Capital Mgmt
+2026-01-08,Dividend Policy
+2026-01-09,Business Risk
+2026-01-10,Operating Cycle
+2026-01-11,Break-even Analysis
+2026-01-12,Equity Securities
+2026-01-13,Stock Markets
+2026-01-14,Market Indices
+2026-01-15,Market Efficiency
+2026-01-16,Equity Valuation: DDM
+2026-01-17,P/E Ratio
+2026-01-18,Price-to-Book
+2026-01-19,EV/EBITDA
+2026-01-20,Free Cash Flow to Equity
+2026-01-21,Bond Features
+2026-01-22,Time to Maturity
+2026-01-23,Yield Measures
+2026-01-24,Bond Pricing
+2026-01-25,Yield Curve
+2026-01-26,Duration
+2026-01-27,Convexity
+2026-01-28,Credit Risk
+2026-01-29,MBS and ABS
+2026-01-30,Term Structure of Interest Rates
+2026-01-31,Forwards
+2026-02-01,Futures
+2026-02-02,Options
+2026-02-03,Swaps
+2026-02-04,Option Strategies
+2026-02-05,Payoff Diagrams
+2026-02-06,Derivative Pricing Basics
+2026-02-07,Real Estate
+2026-02-08,Hedge Funds
+2026-02-09,Private Equity
+2026-02-10,Commodities
+2026-02-11,Infrastructure
+2026-02-12,Alternative vs Traditional
+2026-02-13,Portfolio Concepts
+2026-02-14,Risk and Return
+2026-02-15,Diversification
+2026-02-16,CAPM
+2026-02-17,Efficient Frontier
+2026-02-18,Portfolio Risk
+2026-02-19,Beta
+2026-02-20,Asset Allocation
+2026-02-21,Performance Evaluation
+2026-02-22,Code of Ethics
+2026-02-23,Professional Standards
+2026-02-24,Misconduct
+2026-02-25,Integrity of Capital Markets
+2026-02-26,Duties to Clients
+2026-02-27,Duties to Employers
+2026-02-28,Investment Analysis
+2026-03-01,Conflicts of Interest
+2026-03-02,Responsibilities as CFA Member
+2026-03-03,TVM: Future Value
+2026-03-04,TVM: Present Value
+2026-03-05,Annuities
+2026-03-06,Perpetuities
+2026-03-07,NPV and IRR
+2026-03-08,Descriptive Statistics
+2026-03-09,Probability Concepts
+2026-03-10,Normal Distribution
+2026-03-11,Sampling
+2026-03-12,Hypothesis Testing
+2026-03-13,Demand and Supply
+2026-03-14,Elasticity
+2026-03-15,Market Structures
+2026-03-16,Aggregate Demand/Supply
+2026-03-17,Inflation and Deflation
+2026-03-18,Unemployment
+2026-03-19,Monetary Policy
+2026-03-20,Fiscal Policy
+2026-03-21,Currency Exchange Rates
+2026-03-22,Financial Statements
+2026-03-23,Income Statement
+2026-03-24,Balance Sheet
+2026-03-25,Cash Flow Statement
+2026-03-26,Revenue Recognition
+2026-03-27,Inventory Valuation
+2026-03-28,Depreciation
+2026-03-29,Financial Ratios
+2026-03-30,Leases
+2026-03-31,Taxes
+2026-04-01,Corporate Governance
+2026-04-02,Capital Budgeting
+2026-04-03,Cost of Capital
+2026-04-04,Leverage
+2026-04-05,Working Capital Mgmt
+2026-04-06,Dividend Policy
+2026-04-07,Business Risk
+2026-04-08,Operating Cycle
+2026-04-09,Break-even Analysis
+2026-04-10,Equity Securities
+2026-04-11,Stock Markets
+2026-04-12,Market Indices
+2026-04-13,Market Efficiency
+2026-04-14,Equity Valuation: DDM
+2026-04-15,P/E Ratio
+2026-04-16,Price-to-Book
+2026-04-17,EV/EBITDA
+2026-04-18,Free Cash Flow to Equity
+2026-04-19,Bond Features
+2026-04-20,Time to Maturity
+2026-04-21,Yield Measures
+2026-04-22,Bond Pricing
+2026-04-23,Yield Curve
+2026-04-24,Duration
+2026-04-25,Convexity
+2026-04-26,Credit Risk
+2026-04-27,MBS and ABS
+2026-04-28,Term Structure of Interest Rates
+2026-04-29,Forwards
+2026-04-30,Futures
+2026-05-01,Options
+2026-05-02,Swaps
+2026-05-03,Option Strategies
+2026-05-04,Payoff Diagrams
+2026-05-05,Derivative Pricing Basics
+2026-05-06,Real Estate
+2026-05-07,Hedge Funds
+2026-05-08,Private Equity
+2026-05-09,Commodities
+2026-05-10,Infrastructure
+2026-05-11,Alternative vs Traditional
+2026-05-12,Portfolio Concepts
+2026-05-13,Risk and Return
+2026-05-14,Diversification
+2026-05-15,CAPM
+2026-05-16,Efficient Frontier
+2026-05-17,Portfolio Risk
+2026-05-18,Beta
+2026-05-19,Asset Allocation
+2026-05-20,Performance Evaluation
+2026-05-21,Code of Ethics
+2026-05-22,Professional Standards
+2026-05-23,Misconduct
+2026-05-24,Integrity of Capital Markets
+2026-05-25,Duties to Clients
+2026-05-26,Duties to Employers
+2026-05-27,Investment Analysis
+2026-05-28,Conflicts of Interest
+2026-05-29,Responsibilities as CFA Member
+2026-05-30,TVM: Future Value
+2026-05-31,TVM: Present Value
+2026-06-01,Annuities
+2026-06-02,Perpetuities

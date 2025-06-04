@@ -9,6 +9,8 @@ import os
 from dotenv import load_dotenv
 from datetime import datetime
 from datetime import timedelta
+from finance.financeDaily import financeDaily
+import re
 load_dotenv()
 
 KINDLE_EMAIL = os.environ["KINDLE_EMAIL"]
@@ -24,12 +26,12 @@ YESTERDAY = (datetime.now() - timedelta(days=1)).strftime("%d-%m-%Y")
 URL = f"https://www.drishtiias.com/current-affairs-news-analysis-editorials/news-analysis/{YESTERDAY}/"
 EPUB_FILE = f"Prelims_Pointers_{DATE}.epub"
 EPUB_FILE2 = f"Daily_News_{DATE}.epub"
+EPUB_FILE3 = f"Daily_Finance_{DATE}.epub"
 HTML_FILE = f"prelims_{DATE}.html"
 
 
 def fetch_and_convert_to_html():
     response = requests.get(URL)
-    response.raise_for_status()
 
     soup = BeautifulSoup(response.content, "html.parser")
     # content_div = soup.find("div", class_="article-content")
@@ -51,35 +53,32 @@ def fetch_and_convert_to_html():
     for img in content_div.find_all("img"):
         img["class"] = "inline"
         img["style"] = "display: block; margin-left: auto; margin-right: auto;"
+    # Replace all <a> tags with <span> tags, preserving their contents
     for a in content_div.find_all("a"):
-        a["style"] = "text-decoration: none; pointer-events: none; color: black;"
-        a["href"] = None  # Disable links
+        a.unwrap() # Remove all attributes (like href, class, etc.)
+    # Remove all <b> and </b> tags but keep their contents
+    for b in content_div.find_all("b"):
+        b.unwrap()
+
+    
     for h in content_div.find_all(["h1", "h2", "h3", "h4", "h5", "h6"]):
         pass
     for ifram in content_div.find_all("iframe"):
-        # remove it
         ifram.decompose()
     for hr in content_div.find_all("hr"):
         hr.decompose()
     
-    
-    css = """
-    <style>
-
-
-    </style>
-    """
-    # Download images and replace their src with local filenames
-
     img_folder = f"images_{DATE}"
     os.makedirs(img_folder, exist_ok=True)
 
     for img in content_div.find_all("img"):
         img_url = img.get("src")
         if not img_url:
+            img.decompose()
             continue
         # Handle relative URLs by prepending the base URL
         if img_url.startswith("/"):
+            img.decompose()
             continue;
 
         # Generate a unique filename for each image
@@ -98,11 +97,13 @@ def fetch_and_convert_to_html():
         # Update img src to local path
         img["src"] = os.path.join(img_folder, img_basename)
 
+    # Download images and replace their src with local filenames
+
+    
     html_content = f"""
     <html>
       <head>
         <meta charset='utf-8'>
-        {css}
       </head>
       <body>
         <h1>Prelims Pointers - {DATE}</h1>
@@ -136,7 +137,7 @@ def fetch_through_gemini():
         "Compose a message to start the day that includes to the point \n"
         "- 1 essay for UPSC preparation in paragraph on current affairs in about 500-1000 words\n"
         "- 1 historical incident related to India and the world\n"
-        "- 5 thoughts to ponder related to philosophy or maybe a quote from any book, so give me a book review; don't give generic but feels special for today\n"
+        "- 1 book review don't give generic book review around 250-500 words\n"
         "- 1 Gita paragraph based on today nth day of year so it must be nth paragraph according to index such that I get daily unique paragraph; you don't have to be exact but you don't have to explain why you choose that paragraph\n"
         "- 5 advanced English vocabulary words (with meanings) for SSC CGL\n"
         "- Let suppose it's the nth day of the year and find the nth leetcode question with pseudo code solution, very little explanation\n"
@@ -163,8 +164,8 @@ def fetch_through_gemini():
 def send_to_kindle():
     assert os.path.exists(EPUB_FILE), f"{EPUB_FILE} not found!"
 
-    kindle_emails = ["pramodshah@kindle.com", "amritacs5566@gmail.com", "amankumarnetarhatiyan@gmail.com"]
-    epubs = [EPUB_FILE, EPUB_FILE2]
+    kindle_emails = ["pramodshah@kindle.com"]
+    epubs = [EPUB_FILE, EPUB_FILE2, EPUB_FILE3]
     full_path = f"{CALIBRE_PATH}/calibre-smtp"
     for epub_file in epubs:
         for email in kindle_emails:
@@ -189,4 +190,7 @@ if __name__ == "__main__":
     fetch_and_convert_to_html()
     convert_html_to_epub()
     fetch_through_gemini()
+    financeDaily(CALIBRE_PATH=CALIBRE_PATH, GEMINI_API_KEY=GEMINI_API_KEY, EPUB_FILE3=EPUB_FILE3)
     send_to_kindle()
+
+
