@@ -1,6 +1,12 @@
 # DailyNews to Kindle
 
-Wake up Daily with a good newsletter tailored with AI also scraped by your favourite site daily directly on your favorite EPUB reading device KINDLE or to your inbox daily morning without any hustle of doing it manually. Automate this process of fetching daily news, current affairs, finance, or tech news or any content of your choice, parsing and converting them into Kindle-friendly EPUB files, and sending them directly to your Kindle device via authorised and permissible emails daily morning @7:00 AM through github action workflow cron job with calibre-smtp email server without any hustle of opening daily laptop, connecting with internet and doing the cron job which feels kinda boring and It helps avoid this friction of manual work.
+Wake up every morning to a personalized, AI-curated newsletter delivered straight to your Kindle or inbox in EPUB format. This project automates the entire workflow of gathering, processing, and delivering daily content—so you never miss an update.
+
+Every day at 7:00 AM, a GitHub Actions workflow springs into action, fetching the latest news, current affairs, finance updates, tech stories, and more from your favorite sources. Using advanced scraping techniques and Google Gemini AI, the content is parsed, summarized, and enhanced with essays, book reviews, motivational messages, and even curated UPSC and finance topics.
+
+The processed content is then converted into beautifully formatted EPUB files using Calibre, ensuring a seamless reading experience on your Kindle device. The system automatically emails these files to your Kindle or any specified email address, so your daily reading material is ready and waiting when you wake up—no manual steps required.
+
+With full customization options, you can choose your news sources, tweak AI prompts, and manage recipients. Whether you’re preparing for exams, staying informed, or just love reading, this project makes daily knowledge delivery effortless, reliable, and tailored to your interests.
 
 ---
 
