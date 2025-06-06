@@ -142,6 +142,7 @@ def fetch_through_gemini():
         "- 1 Gita paragraph with explanation based on today nth day of year so it must be nth paragraph according to index such that I get daily unique paragraph; you don't have to be exact but you don't have to explain why you choose that paragraph\n"
         "- 1 Tech news and concept explanation in about 500 words\n"
         "- 1 motivational message for the day in about 100 words\n"
+        "- 1 story from a hindu mythology book like puran, "
         "Ensure the content is fresh, unique, and relevant to today's date. Format the response clearly and engagingly."
     )
 
