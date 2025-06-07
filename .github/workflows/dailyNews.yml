@@ -1,4 +1,4 @@
-name: Send Prelims Pointer to Kindle
+name: Send Daily Digest to Kindle 
 
 on:
   workflow_dispatch:
