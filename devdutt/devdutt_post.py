@@ -28,11 +28,11 @@ def get_devdutt_posts():
     soup = BeautifulSoup(response.content, "html.parser")
     content_div = soup.find("main")  # Adjust the class based on the actual HTML structure
     exclude_classes = ["sidebar", "my-acf-block"]
+    for div in content_div.find_all("div", class_=lambda x: x and any(cls in x for cls in exclude_classes)):
+        div.decompose()
     for div in content_div.find_all("div"):
         div.attrs.pop("class", None)
         div.attrs.pop("style", None)
-    for div in content_div.find_all("div", class_=lambda x: x and any(cls in x for cls in exclude_classes)):
-        div.decompose()
     for header in content_div.find_all(["header"]):
         header.decompose()
     for script in content_div.find_all(["script","style"]):
