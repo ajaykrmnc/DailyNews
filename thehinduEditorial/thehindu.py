@@ -39,27 +39,20 @@ def get_hindu_editorial():
                 os.makedirs(img_folder, exist_ok=True)
                 for img in soup.find_all("img"):
                     img_url = img.get("src")
-                    if not img_url:
-                        img.decompose()
-                        continue
                     # Handle relative URLs by prepending the base URL
-                    if img_url.startswith("/"):
+                    if not img_url or img_url.startswith("/"):
                         img.decompose()
                         continue;
-                ext = os.path.splitext(img_url)[1].split("?")[0] or ".jpg"
-                img_basename = os.path.basename(img_url.split("?")[0])
-                img_path = os.path.join(img_folder, img_basename)
-                # Download image if not already downloaded
-                if not os.path.exists(img_path):
+                    img_basename = os.path.basename(img_url.split("?")[0])
+                    img_path = os.path.join(img_folder, img_basename)
                     try:
                         img_data = requests.get(img_url, timeout=10).content
                         with open(img_path, "wb") as f_img:
                             f_img.write(img_data)
                     except Exception as e:
                         print(f"Failed to download image {img_url}: {e}")
-                        continue
-                # Update img src to local path
-                img["src"] = os.path.join(img_folder, img_basename)
+                    img["src"] = img_path
+
                 
                 content_div = soup.find("div", class_="container article-section")
                 if content_div and response_html.status_code == 200:

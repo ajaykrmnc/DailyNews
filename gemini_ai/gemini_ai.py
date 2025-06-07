@@ -4,14 +4,10 @@ from datetime import datetime
 from google import genai
 from dotenv import load_dotenv  
 
-
-
 DATE = datetime.today().strftime('%d-%b-%Y')
 
 def fetch_through_gemini(GEMINI_API_KEY, CALIBRE_PATH, EPUB_FILE2):
-    genai.configure(api_key=GEMINI_API_KEY)
-    model = genai.GenerativeModel("gemini-2.0-flash")
-
+    client = genai.Client(api_key=GEMINI_API_KEY)
 
     prompt = (
         f"You are an expert news analyst, UPSC mentor, historian, philosopher, and coding instructor. "
@@ -27,14 +23,17 @@ def fetch_through_gemini(GEMINI_API_KEY, CALIBRE_PATH, EPUB_FILE2):
         "Ensure the content is fresh, unique, and relevant to today's date. Format the response clearly and engagingly."
     )
 
-    response = model.generate_content(prompt)
-    filename = f"motivational_message_{DATE}.md"
+    response = client.models.generate_content(model = "gemini-2.0-flash", contents = prompt)
+    filename = f"gemini_ai/News-{DATE}.md"
     calibre_path = f"{CALIBRE_PATH}/ebook-convert"
 
     print(calibre_path)
     def convert_html_to_epub(output_path=None):
         epub_path = output_path if output_path else EPUB_FILE2
-        subprocess.run([calibre_path, filename, epub_path,"--language", "en"], check=True)
+        try:
+            subprocess.run([calibre_path, filename, epub_path,"--language", "en"], check=True)
+        except Exception as e:
+            print(f"Gemini_ai failed to convert: {e}")
         print(f"EPUB saved at: {os.path.abspath(epub_path)}")
 
     with open(filename, "w", encoding="utf-8") as f:

@@ -1,14 +1,11 @@
 import os
-import requests
-from bs4 import BeautifulSoup
 from datetime import datetime
 import subprocess
 import google.generativeai as genai
 import subprocess
 import os
 from dotenv import load_dotenv
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 from finance.financeDaily import financeDaily
 from upsc.upscDaily import upscDaily
 from devdutt.devdutt_post import get_devdutt_posts
@@ -45,27 +42,25 @@ def convert_html_to_epub(HTML_FILE=None, output_path=None):
 def send_to_kindle():
     assert os.path.exists(EPUB_FILE), f"{EPUB_FILE} not found!"
 
-    kindle_emails = ["pramodshah@kindle.com"]
     epubs = [EPUB_FILE, EPUB_FILE2, EPUB_FILE5, EPUB_FILE4]
     full_path = f"{CALIBRE_PATH}/calibre-smtp"
     for epub_file in epubs:
-        for email in kindle_emails:
-            try:
-                result = subprocess.run([
-                    full_path,
-                    "--port", "587",
-                    "--attachment", epub_file,
-                    "--relay", SMTP_SERVER,
-                    "--username", SMTP_USERNAME,
-                    "--password", SMTP_PASSWORD,
-                    FROM_EMAIL,
-                    email,
-                    epub_file
-                ], check=True, capture_output=True, text=True)
-                print(f"✅ Email sent to Kindle: {email}")
-            except subprocess.CalledProcessError as e:
-                print(f"❌ Failed to send email to Kindle: {email}")
-                print("Error Output:", e.stderr)
+        try:
+            result = subprocess.run([
+                full_path,
+                "--port", "587",
+                "--attachment", epub_file,
+                "--relay", SMTP_SERVER,
+                "--username", SMTP_USERNAME,
+                "--password", SMTP_PASSWORD,
+                FROM_EMAIL,
+                KINDLE_EMAIL,
+                epub_file
+            ], check=True, capture_output=True, text=True)
+            print(f"✅ Email sent to Kindle: {KINDLE_EMAIL}")
+        except subprocess.CalledProcessError as e:
+            print(f"❌ Failed to send email to Kindle: {KINDLE_EMAIL}")
+            print("Error Output:", e.stderr)
 
 def get_html_merget(HTML_FILE4, HTML_FILE5):
     with open(HTML_FILE4, "r", encoding="utf-8") as file1, open(HTML_FILE5, "r", encoding="utf-8") as file2:
@@ -97,8 +92,6 @@ if __name__ == "__main__":
     with open("merged_content.html", "w", encoding="utf-8") as f:
         f.write(MERGED_HTML)
     convert_html_to_epub(HTML_FILE="merged_content.html", output_path=EPUB_FILE5)
-
-
     send_to_kindle()
 
 

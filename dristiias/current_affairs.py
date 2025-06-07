@@ -41,10 +41,6 @@ def fetch_and_convert_to_html():
     # Remove all <b> and </b> tags but keep their contents
     for b in content_div.find_all("b"):
         b.unwrap()
-
-    
-    for h in content_div.find_all(["h1", "h2", "h3", "h4", "h5", "h6"]):
-        pass
     for ifram in content_div.find_all("iframe"):
         ifram.decompose()
     for hr in content_div.find_all("hr"):
@@ -64,7 +60,6 @@ def fetch_and_convert_to_html():
             continue;
 
         # Generate a unique filename for each image
-        ext = os.path.splitext(img_url)[1].split("?")[0] or ".jpg"
         img_basename = os.path.basename(img_url.split("?")[0])
         img_path = os.path.join(img_folder, img_basename)
         # Download image if not already downloaded
@@ -77,7 +72,7 @@ def fetch_and_convert_to_html():
                 print(f"Failed to download image {img_url}: {e}")
                 continue
         # Update img src to local path
-        img["src"] = os.path.join(img_folder, img_basename)
+        img["src"] = img_path
 
     # Download images and replace their src with local filenames
 

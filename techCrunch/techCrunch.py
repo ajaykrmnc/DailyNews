@@ -6,7 +6,8 @@ from bs4 import BeautifulSoup
 import os
 load_dotenv()
 # Parse the RSS feed
-feed_url = "https://www.thehindu.com/feeder/default.rss"
+
+feed_url = "https://techcrunch.com/feed/"
 feed = feedparser.parse(feed_url)
 
 # Format today's articles

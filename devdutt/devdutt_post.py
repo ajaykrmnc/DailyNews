@@ -22,22 +22,36 @@ def get_devdutt_posts():
         else:
             posts = []
     response = requests.get(post_link)
+    if response.status_code != 200:
+        print(f"Failed to fetch content. Status code: {response.status_code}")
+        return None
     soup = BeautifulSoup(response.content, "html.parser")
     content_div = soup.find("main")  # Adjust the class based on the actual HTML structure
     exclude_classes = ["sidebar", "my-acf-block"]
     for div in content_div.find_all("div"):
-        div["class"] = None
-        div["style"] = None
+        div.attrs.pop("class", None)
+        div.attrs.pop("style", None)
     for div in content_div.find_all("div", class_=lambda x: x and any(cls in x for cls in exclude_classes)):
         div.decompose()
     for header in content_div.find_all(["header"]):
         header.decompose()
     for script in content_div.find_all(["script","style"]):
         script.decompose()
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.content, "html.parser")
-        with open(HTML_FILE5, "w", encoding="utf-8") as html_file:
-            html_file.write(str(content_div))
-    else:
-        print("Failed to retrieve Devdutt's blog posts.")
+    img_folder = f"devdutt/images-{today}"
+    for img in content_div.find_all("img"):
+        img_url = img.get("src")
+        img_basename = os.path.basename(img_url.split("?")[0]);
+        img_path = os.path.join(img_folder, img_basename)
+        img_data = requests.get(img_url, timeout=10).content
+        try:
+            with open(img_path, "wb") as f_img:
+                f_img.write(img_data)
+        except Exception as e:
+            print(f"Failed to download image {img_url}: e")
+            continue
+        img["src"] = img_path
+        
+    with open(HTML_FILE5, "w", encoding="utf-8") as html_file:
+        html_file.write(str(content_div))
+    
     return HTML_FILE5
