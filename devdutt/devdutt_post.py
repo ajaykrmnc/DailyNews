@@ -35,9 +35,16 @@ def get_devdutt_posts():
         div.attrs.pop("style", None)
     for header in content_div.find_all(["header"]):
         header.decompose()
+    for a in content_div.find_all(["a", "figure"]):
+        a.unwrap();
     for script in content_div.find_all(["script","style"]):
         script.decompose()
-    img_folder = f"devdutt/images-{today}"
+    for img in content_div.find_all("img"):
+        img_tag = soup.new_tag("img");
+        img_tag["src"] = img.get("src");
+        img.insert_after(img_tag)
+        img.decompose()
+    img_folder = f"images"
     for img in content_div.find_all("img"):
         img_url = img.get("src")
         img_basename = os.path.basename(img_url.split("?")[0]);
@@ -49,7 +56,8 @@ def get_devdutt_posts():
         except Exception as e:
             print(f"Failed to download image {img_url}: e")
             continue
-        img["src"] = img_path
+        img["src"] = img_path;
+
         
     with open(HTML_FILE5, "w", encoding="utf-8") as html_file:
         html_file.write(str(content_div))

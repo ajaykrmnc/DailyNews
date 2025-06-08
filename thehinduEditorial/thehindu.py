@@ -23,21 +23,38 @@ def get_hindu_editorial():
                 soup = BeautifulSoup(response_html.content, "html.parser")
                 for element in soup(["script", "style", "nav"]):
                     element.decompose()
-                for tag in soup.find_all("a"):
+                for tag in soup.find_all(["a", "picture"]):
                     tag.unwrap()
                 # Define classes to exclude from the article content
+                
+                content_div = soup.find("div", class_="container article-section")
                 exclude_classes = [
                     "dfp-ad", "related-topics", "related-stories", "caption", "author", "update-publish-time", "comments-shares"
                 ]
-                for div in soup.find_all("div", class_=lambda x: x and any(cls in x for cls in exclude_classes)):
+                for div in content_div.find_all("div", class_=lambda x: x and any(cls in x for cls in exclude_classes)):
                     div.decompose()
-                for img in soup.find_all("img", class_="placeholder"):
+                for div in content_div.find_all("div"):
+                    if "class" in div.attrs:
+                        del div.attrs["class"]
+                    if "style" in div.attrs:
+                        del div.attrs["style"]
+                for img in content_div.find_all("img"):
                     img.decompose()
-                for btn in soup.find_all("button"):
+                cnt = 0;
+                for source in content_div.find_all("source"):
+                    cnt += 1
+                    if cnt % 4 != 1:
+                        source.decompose();
+                        continue;
+                    img_tag = soup.new_tag("img")
+                    img_tag["src"] = source.get("srcset")
+                    source.insert_after(img_tag)
+                    source.decompose()
+                for btn in content_div.find_all("button"):
                     btn.decompose()
-                img_folder = f"thehinduEditorial/images/"
+                img_folder = f"images/"
                 os.makedirs(img_folder, exist_ok=True)
-                for img in soup.find_all("img"):
+                for img in content_div.find_all("img"):
                     img_url = img.get("src")
                     # Handle relative URLs by prepending the base URL
                     if not img_url or img_url.startswith("/"):
@@ -46,15 +63,13 @@ def get_hindu_editorial():
                     img_basename = os.path.basename(img_url.split("?")[0])
                     img_path = os.path.join(img_folder, img_basename)
                     try:
-                        img_data = requests.get(img_url, timeout=10).content
+                        img_data = requests.get(img_url).content
                         with open(img_path, "wb") as f_img:
                             f_img.write(img_data)
                     except Exception as e:
                         print(f"Failed to download image {img_url}: {e}")
                     img["src"] = img_path
 
-                
-                content_div = soup.find("div", class_="container article-section")
                 if content_div and response_html.status_code == 200:
                     with open(HTML_FILE4, "a", encoding="utf-8") as html_file:
                         html_file.write(str(content_div))
@@ -63,5 +78,7 @@ def get_hindu_editorial():
         print("The Hindu Editorial RSS feed saved successfully.")
     else:
         print(f"Failed to retrieve The Hindu Editorial RSS feed. Status code: {response.status_code}")
-
+    epub_path = f"thehinduEditorial/thehindu.epub"
     return HTML_FILE4
+
+get_hindu_editorial()

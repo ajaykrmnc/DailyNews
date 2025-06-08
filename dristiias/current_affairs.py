@@ -2,6 +2,7 @@ import subprocess
 import os
 from datetime import datetime, timedelta
 import requests
+import feedparser
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 load_dotenv()
@@ -10,6 +11,7 @@ load_dotenv()
 DATE = datetime.today().strftime('%d-%b-%Y')
 YESTERDAY = (datetime.now() - timedelta(days=1)).strftime("%d-%m-%Y")
 URL = f"https://www.drishtiias.com/current-affairs-news-analysis-editorials/news-analysis/{YESTERDAY}/"
+FEED_URL = "https://www.drishtiias.com/rss.rss"
 HTML_FILE = f"dristiias/prelims_{DATE}.html"
 
 def fetch_and_convert_to_html():
@@ -92,3 +94,6 @@ def fetch_and_convert_to_html():
     with open(HTML_FILE, "w", encoding="utf-8") as f:
         f.write(html_content)
     return HTML_FILE
+
+
+
