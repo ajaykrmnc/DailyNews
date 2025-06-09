@@ -25,24 +25,23 @@ CALIBRE_PATH = os.environ["CALIBRE_PATH"]
 
 DATE = datetime.today().strftime('%d-%b-%Y')
 YESTERDAY = (datetime.now() - timedelta(days=1)).strftime("%d-%m-%Y")
-EPUB_FILE = f"Current Affairs-{DATE}.epub"
-EPUB_FILE2 = f"News-{DATE}.epub"
+EPUB_FILE = f"DristiIAS-{DATE}.epub"
 EPUB_FILE3 = f"Finance-{DATE}.epub"
-EPUB_FILE4 = f"UPSC-{DATE}.epub"
-EPUB_FILE5 = f"Devdutt-{DATE}.epub"
+EPUB_FILE4 = f"UPSC_AI-{DATE}.epub"
+EPUB_FILE5 = f"Editorial_Dev-{DATE}.epub"
 
 def convert_html_to_epub(HTML_FILE=None, output_path=None):
     epub_path = output_path if output_path else EPUB_FILE
     print(CALIBRE_PATH);
     full_calibre_path = f"{CALIBRE_PATH}/ebook-convert"
     print(full_calibre_path)
-    subprocess.run([full_calibre_path, HTML_FILE, epub_path, "--language", "en", "--title", DATE], check=True)
+    subprocess.run([full_calibre_path, HTML_FILE, epub_path, "--language", "en", "--title", DATE, "--level1-toc", "//h1", "--level2-toc", "//h2","--authors", "Ajay Kumar"], check=True)
     print(f"EPUB saved at: {os.path.abspath(epub_path)}")
 
 def send_to_kindle():
     assert os.path.exists(EPUB_FILE), f"{EPUB_FILE} not found!"
 
-    epubs = [EPUB_FILE, EPUB_FILE2, EPUB_FILE5, EPUB_FILE4]
+    epubs = [EPUB_FILE, EPUB_FILE5, EPUB_FILE4]
     full_path = f"{CALIBRE_PATH}/calibre-smtp"
     for epub_file in epubs:
         try:
@@ -83,14 +82,16 @@ def get_html_merget(HTML_FILE4, HTML_FILE5):
 if __name__ == "__main__":
     HTML_FILE = fetch_and_convert_to_html()
     convert_html_to_epub(HTML_FILE=HTML_FILE, output_path=EPUB_FILE)
-    fetch_through_gemini(GEMINI_API_KEY=GEMINI_API_KEY, CALIBRE_PATH=CALIBRE_PATH, EPUB_FILE2=EPUB_FILE2)
     # # financeDaily(CALIBRE_PATH=CALIBRE_PATH, GEMINI_API_KEY=GEMINI_API_KEY, EPUB_FILE3=EPUB_FILE3)
     upscDaily(CALIBRE_PATH=CALIBRE_PATH, GEMINI_API_KEY=GEMINI_API_KEY, EPUB_FILE=EPUB_FILE4)
     HTML_FILE4 = get_hindu_editorial()
+    with open(HTML_FILE4, "r", encoding="utf-8") as f:
+        html_content = f.read()
+    print(html_content)
     HTML_FILE5 = get_devdutt_posts()
     MERGED_HTML = get_html_merget(HTML_FILE4, HTML_FILE5)
-    with open("merged_content.html", "w", encoding="utf-8") as f:
-        f.write(MERGED_HTML)
+    with open(f"merged_content.html", "w", encoding="utf-8") as f:
+        f.write(html_content)
     convert_html_to_epub(HTML_FILE="merged_content.html", output_path=EPUB_FILE5)
     send_to_kindle()
 

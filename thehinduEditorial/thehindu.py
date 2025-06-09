@@ -40,6 +40,7 @@ def get_hindu_editorial():
                         del div.attrs["style"]
                 for img in content_div.find_all("img"):
                     img.decompose()
+                
                 cnt = 0;
                 for source in content_div.find_all("source"):
                     cnt += 1
@@ -78,7 +79,4 @@ def get_hindu_editorial():
         print("The Hindu Editorial RSS feed saved successfully.")
     else:
         print(f"Failed to retrieve The Hindu Editorial RSS feed. Status code: {response.status_code}")
-    epub_path = f"thehinduEditorial/thehindu.epub"
     return HTML_FILE4
-
-get_hindu_editorial()
