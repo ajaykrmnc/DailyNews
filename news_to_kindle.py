@@ -25,6 +25,7 @@ CALIBRE_PATH = os.environ["CALIBRE_PATH"]
 
 DATE = datetime.today().strftime('%d-%b-%Y')
 YESTERDAY = (datetime.now() - timedelta(days=1)).strftime("%d-%m-%Y")
+MERGED_HTML = f"Editorial_Dev.html"
 EPUB_FILE = f"DristiIAS-{DATE}.epub"
 EPUB_FILE3 = f"Finance-{DATE}.epub"
 EPUB_FILE4 = f"UPSC_AI-{DATE}.epub"
@@ -86,7 +87,9 @@ if __name__ == "__main__":
     upscDaily(CALIBRE_PATH=CALIBRE_PATH, GEMINI_API_KEY=GEMINI_API_KEY, EPUB_FILE=EPUB_FILE4)
     HTML_FILE4 = get_hindu_editorial()
     HTML_FILE5 = get_devdutt_posts()
-    MERGED_HTML = get_html_merget(HTML_FILE4, HTML_FILE5)
+    merge_content = get_html_merget(HTML_FILE4, HTML_FILE5)
+    with open(MERGED_HTML, "w", encoding="utf-8") as f:
+        f.write(merge_content)
     convert_html_to_epub(HTML_FILE=MERGED_HTML, output_path=EPUB_FILE5)
     send_to_kindle()
 
