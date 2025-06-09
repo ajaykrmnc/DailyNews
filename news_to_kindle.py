@@ -85,11 +85,9 @@ if __name__ == "__main__":
     # # financeDaily(CALIBRE_PATH=CALIBRE_PATH, GEMINI_API_KEY=GEMINI_API_KEY, EPUB_FILE3=EPUB_FILE3)
     upscDaily(CALIBRE_PATH=CALIBRE_PATH, GEMINI_API_KEY=GEMINI_API_KEY, EPUB_FILE=EPUB_FILE4)
     HTML_FILE4 = get_hindu_editorial()
-    # with open(HTML_FILE4, "r", encoding="utf-8") as f:
-    #     html_content = f.read()
     HTML_FILE5 = get_devdutt_posts()
     MERGED_HTML = get_html_merget(HTML_FILE4, HTML_FILE5)
-    convert_html_to_epub(HTML_FILE="merged_content.html", output_path=EPUB_FILE5)
+    convert_html_to_epub(HTML_FILE=MERGED_HTML, output_path=EPUB_FILE5)
     send_to_kindle()
 
 
