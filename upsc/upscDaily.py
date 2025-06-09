@@ -78,7 +78,7 @@ def upscDaily(CALIBRE_PATH, GEMINI_API_KEY, EPUB_FILE):
             with open(filename, "a", encoding="utf-8") as f:
                 f.write(response.text)
             with open(filename, "a", encoding = "utf-8") as f:
-                f.write(response.text)
+                f.write(response2.text)
             # Convert to EPUB using Calibre
         else:
             print("No topic found for today.")
