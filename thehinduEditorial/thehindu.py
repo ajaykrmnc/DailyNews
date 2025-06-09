@@ -27,10 +27,22 @@ def get_hindu_editorial():
                     tag.unwrap()
                 # Define classes to exclude from the article content
                 
-                content_div = soup.find("div", class_="container article-section")
+                include_classes = [
+                    "div.storyline", "div.editorial", "div.opinion", "div.columns", "article-section"
+                ]
                 exclude_classes = [
                     "dfp-ad", "related-topics", "related-stories", "caption", "author", "update-publish-time", "comments-shares"
                 ]
+                # Find the main content div using the include_classes selectors
+                content_div = None
+                for selector in include_classes:
+                    found = soup.select_one(selector)
+                    if found:
+                        content_div = found
+                        break
+                if not content_div:
+                    print(f"Could not find main content for: {entry.title}")
+                    continue
                 for div in content_div.find_all("div", class_=lambda x: x and any(cls in x for cls in exclude_classes)):
                     div.decompose()
                 for div in content_div.find_all("div"):
@@ -53,14 +65,14 @@ def get_hindu_editorial():
                     source.decompose()
                 for btn in content_div.find_all("button"):
                     btn.decompose()
-                img_folder = f"images/"
+                img_folder = os.path.abspath(os.path.join(os.path.dirname(HTML_FILE4), "..", "images"))
                 os.makedirs(img_folder, exist_ok=True)
                 for img in content_div.find_all("img"):
                     img_url = img.get("src")
                     # Handle relative URLs by prepending the base URL
                     if not img_url or img_url.startswith("/"):
                         img.decompose()
-                        continue;
+                        continue
                     img_basename = os.path.basename(img_url.split("?")[0])
                     img_path = os.path.join(img_folder, img_basename)
                     try:
@@ -69,7 +81,8 @@ def get_hindu_editorial():
                             f_img.write(img_data)
                     except Exception as e:
                         print(f"Failed to download image {img_url}: {e}")
-                    img["src"] = img_path
+                    # Set src relative to the HTML file location
+                    img["src"] = os.path.join(img_folder, img_basename)
 
                 if content_div and response_html.status_code == 200:
                     with open(HTML_FILE4, "a", encoding="utf-8") as html_file:
@@ -80,3 +93,4 @@ def get_hindu_editorial():
     else:
         print(f"Failed to retrieve The Hindu Editorial RSS feed. Status code: {response.status_code}")
     return HTML_FILE4
+# get_hindu_editorial()

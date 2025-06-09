@@ -44,7 +44,7 @@ def get_devdutt_posts():
         img_tag["src"] = img.get("src");
         img.insert_after(img_tag)
         img.decompose()
-    img_folder = f"images"
+    img_folder = os.path.abspath(os.path.join(os.path.dirname(HTML_FILE5), "..", "images"))
     for img in content_div.find_all("img"):
         img_url = img.get("src")
         img_basename = os.path.basename(img_url.split("?")[0]);
