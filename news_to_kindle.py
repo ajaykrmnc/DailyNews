@@ -12,6 +12,7 @@ from devdutt.devdutt_post import get_devdutt_posts
 from thehinduEditorial.thehindu import get_hindu_editorial
 from dristiias.current_affairs import fetch_and_convert_to_html
 from gemini_ai.gemini_ai import fetch_through_gemini
+from techCrunch.techCrunch import techCrunch
 
 load_dotenv()
 
@@ -92,5 +93,6 @@ if __name__ == "__main__":
         f.write(merge_content)
     convert_html_to_epub(HTML_FILE=MERGED_HTML, output_path=EPUB_FILE5)
     send_to_kindle()
+    techCrunch();
 
 

@@ -79,7 +79,7 @@ def upscDaily(CALIBRE_PATH, GEMINI_API_KEY, EPUB_FILE):
             "- 1 motivational message for the day in about 100 words\n"
             "- 1 story from a hindu mythology book like puran, vedas or upnishads"
             "Ensure the content is fresh, unique, and relevant to today's date. Format the response clearly and engagingly."
-        )
+    )
     response2 = client.models.generate_content(model = "gemini-2.0-flash", contents = prompt)
     with open(filename, "a", encoding = "utf-8") as f:
         f.write(response2.text)

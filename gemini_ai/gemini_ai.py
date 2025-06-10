@@ -5,10 +5,11 @@ from google import genai
 from dotenv import load_dotenv  
 
 DATE = datetime.today().strftime('%d-%b-%Y')
+GEMINI_API_KEY = os.environ["GEMINI_API_KEY"];
+CALIBRE_PATH = os.environ["CALIBRE_PATH"];
 
-def fetch_through_gemini(GEMINI_API_KEY, CALIBRE_PATH, EPUB_FILE2):
+def fetch_through_gemini(EPUB_FILE2):
     client = genai.Client(api_key=GEMINI_API_KEY)
-
     prompt = (
         f"Your role is to create a daily digest for Indian readers\n"
         f"Today is {DATE}.\n"

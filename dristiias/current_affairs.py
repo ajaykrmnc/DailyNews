@@ -3,9 +3,12 @@ import os
 from datetime import datetime, timedelta
 import requests
 import feedparser
+import sys
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 load_dotenv()
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")));
+from extractFunction.parseFunction import saveImages
 
 
 DATE = datetime.today().strftime('%d-%b-%Y')
@@ -48,36 +51,9 @@ def fetch_and_convert_to_html():
     for hr in content_div.find_all("hr"):
         hr.decompose()
     
-    img_folder = f"images_{DATE}"
-    os.makedirs(img_folder, exist_ok=True)
-
-    for img in content_div.find_all("img"):
-        img_url = img.get("src")
-        if not img_url:
-            img.decompose()
-            continue
-        # Handle relative URLs by prepending the base URL
-        if img_url.startswith("/"):
-            img.decompose()
-            continue;
-
-        # Generate a unique filename for each image
-        img_basename = os.path.basename(img_url.split("?")[0])
-        img_path = os.path.join(img_folder, img_basename)
-        # Download image if not already downloaded
-        if not os.path.exists(img_path):
-            try:
-                img_data = requests.get(img_url, timeout=10).content
-                with open(img_path, "wb") as f_img:
-                    f_img.write(img_data)
-            except Exception as e:
-                print(f"Failed to download image {img_url}: {e}")
-                continue
-        # Update img src to local path
-        img["src"] = img_path
-
+    img_folder = f"images"
+    saveImages(content_div, img_folder)
     # Download images and replace their src with local filenames
-
     
     html_content = f"""
     <html>
@@ -94,6 +70,6 @@ def fetch_and_convert_to_html():
     with open(HTML_FILE, "w", encoding="utf-8") as f:
         f.write(html_content)
     return HTML_FILE
-
+fetch_and_convert_to_html()
 
 
