@@ -4,6 +4,7 @@ import subprocess
 import os
 from google import genai
 from dotenv import load_dotenv
+from bs4 import BeautifulSoup
 load_dotenv()
 
 CALIBRE_PATH = os.environ["CALIBRE_PATH"]
@@ -70,7 +71,7 @@ def saveImages(soup, img_path):
         # Update img src to local path
         img["src"] = os.path.join(os.path.dirname(__file__), "..", img_file_path)
         img_tag = soup.new_tag("img");
-        img_tag["src"] = img["src"];
+        img_tag["src"] = img.get("src");
         img.insert_after(img_tag);
         img.decompose();
 

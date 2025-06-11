@@ -21,9 +21,12 @@ def fetch_and_convert_to_html():
     response = requests.get(URL)
 
     soup = BeautifulSoup(response.content, "html.parser")
-    # content_div = soup.find("div", class_="article-content")
     content_div = soup.find("div", class_="list-category")
     if not content_div:
+        raise Exception("Failed to find the main content div.")
+    soup = BeautifulSoup(str(content_div), "html.parser");
+    # Work directly with content_div as a soup fragment
+    if not soup:
         raise Exception("Failed to find expected content on the page.")
 
     exclude_classes = {
@@ -31,28 +34,28 @@ def fetch_and_convert_to_html():
         "starRating", "social-shares", "next-post", "recommendations-layout"
     }
     # Remove unwanted divs based on class names
-    for div in content_div.find_all("div", class_=lambda x: x and any(cls in x for cls in exclude_classes)):
+    for div in soup.find_all("div", class_=lambda x: x and any(cls in x for cls in exclude_classes)):
         div.decompose()
     # Remove unwanted script and style tags
-    for script in content_div.find_all("script"):
+    for script in soup.find_all("script"):
         script.decompose()
     
-    for img in content_div.find_all("img"):
+    for img in soup.find_all("img"):
         img["class"] = "inline"
         img["style"] = "display: block; margin-left: auto; margin-right: auto;"
     # Replace all <a> tags with <span> tags, preserving their contents
-    for a in content_div.find_all("a"):
+    for a in soup.find_all("a"):
         a.unwrap() # Remove all attributes (like href, class, etc.)
     # Remove all <b> and </b> tags but keep their contents
-    for b in content_div.find_all("b"):
+    for b in soup.find_all("b"):
         b.unwrap()
-    for ifram in content_div.find_all("iframe"):
+    for ifram in soup.find_all("iframe"):
         ifram.decompose()
-    for hr in content_div.find_all("hr"):
+    for hr in soup.find_all("hr"):
         hr.decompose()
     
     img_folder = f"images"
-    saveImages(content_div, img_folder)
+    saveImages(soup, img_folder)
     # Download images and replace their src with local filenames
     
     html_content = f"""
