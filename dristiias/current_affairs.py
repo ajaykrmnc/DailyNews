@@ -65,7 +65,7 @@ def fetch_and_convert_to_html():
       </head>
       <body>
         <h1>Prelims Pointers - {DATE}</h1>
-        {str(content_div)}
+        {str(soup)}
       </body>
     </html>
     """

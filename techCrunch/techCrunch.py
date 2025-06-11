@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 import os
 load_dotenv()
+from readabilipy import simple_json_from_html_string
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from extractFunction.parseFunction import send_to_kindle, removeClasses, saveImages, convert_file_to_epub
@@ -18,6 +19,7 @@ def techCrunch():
     html_file = f"techCrunch/tech.html"
     with open(html_file, "w", encoding="utf-8") as f:
         pass
+    article = ""
     for entry in feed.entries:
         published = (datetime(*entry.published_parsed[:6]).date()).strftime('%Y-%m-%d')
         yesterday = ((datetime.now() - timedelta(days=1)).date()).strftime('%Y-%m-%d')
@@ -29,22 +31,35 @@ def techCrunch():
             response = requests.get(entry.link)
             if response.status_code == 200:
                 content = response.text
-                soup = BeautifulSoup(content, "html.parser");
+                article_data = simple_json_from_html_string(content, use_readability=True)
+                html_content = f"<h2>{article_data['title']}</h2>{article_data['content']}"
+                soup = BeautifulSoup(html_content, "html.parser")
 
-                exclude_classes = [
-                    "article-sidebar", "ad-unit__ad", "ad-unit", "footer-units", "article-bottom-section", "article--brief", "wp-block-techcrunch-social-share"
-                    ,"wp-block-techcrunch-inline-cta", "wp-block-techcrunch-post-authors", "wp-block-techcrunch-menu-utility"
-                ]
-                for footer in soup.select("footer"):
-                    footer.decompose();
-                removeClasses(soup, None, exclude_classes, True, True)
+                for svg in soup.find_all("svg"):
+                    if svg:
+                        svg.decompose()
+                for a in soup.find_all("a"):
+                    if a:
+                        a.unwrap()
 
                 img_path = f"images"
                 saveImages(soup, img_path)
-                # Write the collected content to the HTML file (overwrite each time)
-                with open(html_file, "a", encoding="utf-8") as f:
-                    f.write(str(soup))
-
+                # Append the processed HTML to the article string
+                article += str(soup)
+                
+    html_content = f"""
+        <html>
+        <head>
+            <meta charset='utf-8'>
+        </head>
+        <body>
+            <h1>TechCrunch </h1>
+            {article}
+        </body>
+        </html>
+    """
+    with open(html_file, "w", encoding="utf-8") as f:
+        f.write(html_content)
     epub_file = f"techCrunch/daily.epub"
     convert_file_to_epub(html_file, epub_file)
     send_to_kindle(epub_file);
