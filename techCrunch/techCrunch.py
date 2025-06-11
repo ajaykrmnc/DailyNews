@@ -53,7 +53,6 @@ def techCrunch():
             <meta charset='utf-8'>
         </head>
         <body>
-            <h1>TechCrunch </h1>
             {article}
         </body>
         </html>
@@ -63,7 +62,7 @@ def techCrunch():
     epub_file = f"techCrunch/daily.epub"
     convert_file_to_epub(html_file, epub_file)
     send_to_kindle(epub_file);
-
+# techCrunch();
 
    
 

@@ -50,6 +50,17 @@ def get_hindu_editorial():
                         del div.attrs["class"]
                     if "style" in div.attrs:
                         del div.attrs["style"]
+                # Improve headline styling for better readability
+                for h1 in content_div.find_all("h1"):
+                    h1["style"] = "font-size: 1.5em; font-weight: bold; margin-bottom: 0.5em;"
+                for h2 in content_div.find_all("h2"):
+                    h2["style"] = "font-size: 1.2em; font-weight: bold; margin-bottom: 0.4em;"
+                for h3 in content_div.find_all("h3"):
+                    h3["style"] = "font-size: 1em; font-weight: bold; margin-bottom: 0.3em;"
+                # Optional: Add some spacing to paragraphs for readability
+                for p in content_div.find_all("p"):
+                    p["style"] = "margin-bottom: 1em; line-height: 1.6;"
+
                 for img in content_div.find_all("img"):
                     img.decompose()
                 
