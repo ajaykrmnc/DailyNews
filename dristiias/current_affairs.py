@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 load_dotenv()
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")));
-from extractFunction.parseFunction import saveImages
+from extractFunction.parseFunction import send_to_kindle, removeClasses, saveImages, convert_file_to_epub
 
 
 DATE = datetime.today().strftime('%d-%b-%Y')
@@ -17,7 +17,7 @@ URL = f"https://www.drishtiias.com/current-affairs-news-analysis-editorials/news
 FEED_URL = "https://www.drishtiias.com/rss.rss"
 HTML_FILE = f"dristiias/prelims_{DATE}.html"
 
-def fetch_and_convert_to_html():
+def dristiIAS():
     response = requests.get(URL)
 
     soup = BeautifulSoup(response.content, "html.parser")
@@ -54,7 +54,7 @@ def fetch_and_convert_to_html():
     for hr in soup.find_all("hr"):
         hr.decompose()
     
-    img_folder = f"images"
+    img_folder = f"dristiias/images"
     saveImages(soup, img_folder)
     # Download images and replace their src with local filenames
     
@@ -72,7 +72,9 @@ def fetch_and_convert_to_html():
 
     with open(HTML_FILE, "w", encoding="utf-8") as f:
         f.write(html_content)
-    return HTML_FILE
-fetch_and_convert_to_html()
+    epub_file = f"dristiias/DristiIAS-{DATE}.epub"
+    convert_file_to_epub(HTML_FILE, epub_file);
+    send_to_kindle(epub_file);
+    
 
 

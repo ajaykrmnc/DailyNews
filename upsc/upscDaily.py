@@ -10,12 +10,8 @@ from google import genai
 import os
 from datetime import datetime
 import subprocess
+from extractFunction.parseFunction import send_to_kindle, saveImages, convert_file_to_epub
 
-# create a DataFrame for the UPSC daily exam questions
-# create a csv from each gs1 gs2 gs3 gs4 list
-# and save it to a file with date assigned to csv from each 
-
-# upscDaily.py
 def extract_topics():
     today = datetime.today().strftime("%d-%m-%Y") 
     gs = [gs1, gs2, gs3, gs4]
@@ -46,9 +42,9 @@ def extract_topics():
                 writer.writerow([current_date, selected_topics])
 
 
-def upscDaily(CALIBRE_PATH, GEMINI_API_KEY, EPUB_FILE):
+def upscDaily(GEMINI_API_KEY):
     today = datetime.today().strftime("%d-%m-%Y") 
-    filename = f"UPSC-{today}.md"
+    filename = f"upsc/UPSC-{today}.md"
     with open(filename, "w", encoding="utf-8") as f:
         pass;
     for i in range(4):
@@ -91,10 +87,6 @@ def upscDaily(CALIBRE_PATH, GEMINI_API_KEY, EPUB_FILE):
             f.write(response2.text)
     except Exception as e:
         print(e);
-    calibre_full_path = f"{CALIBRE_PATH}/ebook-convert"
-    def convert_md_to_epub(output_path=None):
-        epub_path = output_path if output_path else EPUB_FILE
-        subprocess.run([calibre_full_path, filename, epub_path,"--language", "en"], check=True)
-        print(f"EPUB saved at: {os.path.abspath(epub_path)}")
-    convert_md_to_epub()
-    print(f"Today's finance topic saved to {filename} and converted to EPUB at {EPUB_FILE}.")
+    epub_file = f"upsc/UPSC_AI-{today}.epub";
+    convert_file_to_epub(filename, epub_file);
+    send_to_kindle(epub_file);

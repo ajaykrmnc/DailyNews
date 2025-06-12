@@ -25,7 +25,6 @@ def techCrunch():
         yesterday = ((datetime.now() - timedelta(days=1)).date()).strftime('%Y-%m-%d')
         # Truncate the file before writing (overwrite mode)
         
-        print(entry.title);
         if published == yesterday:
             # fetch the content of the article
             response = requests.get(entry.link)
@@ -42,7 +41,7 @@ def techCrunch():
                     if a:
                         a.unwrap()
 
-                img_path = f"images"
+                img_path = f"techCrunch/images"
                 img_full_path = os.path.abspath(img_path);
                 saveImages(soup, img_full_path)
                 # Append the processed HTML to the article string
