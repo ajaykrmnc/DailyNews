@@ -3,13 +3,16 @@ from bs4 import BeautifulSoup
 import csv
 import time
 
-BASE_URL = " https://devdutt.com/post-archive/"  # customize
+BASE_URL = " https://devdutt.com/post-archive/page/{page_num}"  # customize
 all_posts = []
 page_num = 1
-
+with open("devdutt/devdutt_posts.csv", "w", newline="", encoding="utf-8") as f:
+    writer = csv.writer(f)
+    writer.writerow(["Title", "Link"])
 while page_num <= 154:  # Adjust the range as needed
     print(f"Scraping page {page_num}...")
     url = BASE_URL.format(page_num=page_num)
+    print(url);
     res = requests.get(url)
 
     if res.status_code != 200:
@@ -37,11 +40,9 @@ while page_num <= 154:  # Adjust the range as needed
 
     page_num += 1
     time.sleep(1)  # Be polite with 1 sec delay
+    with open("devdutt/devdutt_posts.csv", "a", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerows(all_posts)
 
-# # Save to CSV
-with open("devdutt/devdutt_posts.csv", "w", newline="", encoding="utf-8") as f:
-    writer = csv.writer(f)
-    writer.writerow(["Title", "Link"])
-    writer.writerows(all_posts)
 # print(f"Scraped {len(all_posts)} posts from Devdutt's blog.")
 # Note: The above code scrapes titles and links from Devdutt's blog and saves them to a CSV file.
