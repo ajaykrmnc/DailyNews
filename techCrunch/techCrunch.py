@@ -43,7 +43,8 @@ def techCrunch():
                         a.unwrap()
 
                 img_path = f"images"
-                saveImages(soup, img_path)
+                img_full_path = os.path.abspath(img_path);
+                saveImages(soup, img_full_path)
                 # Append the processed HTML to the article string
                 article += str(soup)
                 

@@ -69,7 +69,7 @@ def saveImages(soup, img_path):
                 print(f"Failed to download image {img_url}", {e}, img_path)
                 continue
         # Update img src to local path
-        img["src"] = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", img_file_path))
+        img["src"] = os.path.join(img_path, img_basename)
         img_tag = soup.new_tag("img");
         img_tag["src"] = img.get("src");
         img.insert_after(img_tag);
