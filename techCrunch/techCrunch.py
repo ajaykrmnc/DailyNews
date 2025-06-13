@@ -25,9 +25,10 @@ def techCrunch():
         yesterday = ((datetime.now() - timedelta(days=1)).date()).strftime('%Y-%m-%d')
         # Truncate the file before writing (overwrite mode)
         
-        if published == yesterday:
+        if published == today:
             # fetch the content of the article
             response = requests.get(entry.link)
+            print(entry.link);
             if response.status_code == 200:
                 content = response.text
                 article_data = simple_json_from_html_string(content, use_readability=True)
@@ -60,9 +61,7 @@ def techCrunch():
     with open(html_file, "w", encoding="utf-8") as f:
         f.write(html_content)
     epub_file = f"techCrunch/daily.epub"
-    convert_file_to_epub(html_file, epub_file)
+    convert_file_to_epub(html_file, epub_file, f"techCrunch/techCrunch.png")
     send_to_kindle(epub_file);
-# techCrunch();
-
    
 

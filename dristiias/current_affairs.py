@@ -55,7 +55,8 @@ def dristiIAS():
         hr.decompose()
     
     img_folder = f"dristiias/images"
-    saveImages(soup, img_folder)
+    img_full_path = os.path.abspath(img_folder);
+    saveImages(soup, img_full_path)
     # Download images and replace their src with local filenames
     
     html_content = f"""
@@ -73,7 +74,8 @@ def dristiIAS():
     with open(HTML_FILE, "w", encoding="utf-8") as f:
         f.write(html_content)
     epub_file = f"dristiias/DristiIAS-{DATE}.epub"
-    convert_file_to_epub(HTML_FILE, epub_file);
+    
+    convert_file_to_epub(HTML_FILE, epub_file, f"dristiias/dristiIAS.png");
     send_to_kindle(epub_file);
     
 

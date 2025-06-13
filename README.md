@@ -1,4 +1,4 @@
-# DailyNews to Kindle
+**Automated, AI-powered daily news and knowledge delivery—direct to your Kindle.**
 
 Wake up every morning to a personalized, AI-curated newsletter delivered straight to your Kindle or inbox in EPUB format. This project automates the entire workflow of gathering, processing, and delivering daily content—so you never miss an update.
 
@@ -10,18 +10,20 @@ With full customization options, you can choose your news sources, tweak AI prom
 
 ---
 
-## Features
+## ✨ Features
 
-- **Current Affairs Scraper:** Fetches daily news from [drishtiias.com](https://www.drishtiias.com) and processes it for Kindle through beautifull soup python library.
+- **Current Affairs Scraper:** Fetches daily news from [drishtiias.com](https://www.drishtiias.com) and other sources, processed with BeautifulSoup.
 - **AI-Generated Content:** Uses Google Gemini to generate daily essays, book reviews, Gita paragraphs, tech news, and motivational messages.
-- **Finance & UPSC Schedules:** Generates daily finance and UPSC topics from curated lists and CSVs which contains all the topics and subtopics mapped with the .
-- **EPUB Conversion:** Converts HTML/Markdown content to EPUB using Calibre Ebook Convert CLI Tool.
-- **Formatting:** Format the EPUB in such a way that it looks good on the Kindle Device by formatting correctly and embedding the css to the and chanding the language in it.
-- **Kindle Delivery:** Emails the generated EPUB files to your Kindle device automatically daily. The email which is use to send to the Kindle should be allowed and can be changed through www.amazon.in/myk
+- **Finance & UPSC Schedules:** Generates daily finance and UPSC topics from curated lists and CSVs.
+- **EPUB Conversion:** Converts HTML/Markdown content to EPUB using Calibre’s CLI.
+- **Kindle-Optimized Formatting:** Ensures EPUBs are styled and formatted for the best Kindle reading experience.
+- **Automated Kindle Delivery:** Emails the generated EPUB files to your Kindle device daily. (Sender email must be whitelisted in your Amazon account.)
+- **Customizable:** Easily add or remove news sources, change AI prompts, and manage recipients.
+- **Automated Workflow:** Runs daily via GitHub Actions or can be scheduled locally with cron.
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 DailyNews/
@@ -31,18 +33,30 @@ DailyNews/
 ├── finance/
 │   └── financeDaily.py
 ├── upsc/
-│   └── upscDaily.py
-│   └── gs1.py
-│   └── gs2.py
-│   └── gs3.py
+│   ├── upscDaily.py
+│   ├── gs1.py
+│   ├── gs2.py
+│   ├── gs3.py
 │   └── gs4.py
+├── extractFunction/
+│   ├── __init__.py
+│   └── parseFunction.py
+├── techCrunch/
+│   └── techCrunch.py
+├── thehinduEditorial/
+│   └── thehindu.py
+├── dristiias/
+│   └── current_affairs.py
 ├── images_<date>/
 │   └── ...downloaded images...
+└── .github/
+    └── workflows/
+        └── dailyNews.yml
 ```
 
 ---
 
-## Setup
+## ⚙️ Setup
 
 ### 1. Install Dependencies
 
@@ -76,7 +90,7 @@ CALIBRE_PATH=/path/to/calibre
 
 ---
 
-## Usage
+## 🚀 Usage
 
 Run the main script:
 
@@ -91,35 +105,34 @@ This will:
 
 ---
 
-## Customization
+## 🛠️ Customization
 
-- **News Source:** Edit the `URL` in `news_to_kindle.py` to change the news source.
-- **AI Prompts:** Modify the prompt in `fetch_through_gemini()` for different content.
-- **Kindle Recipients:** Edit the `kindle_emails` list in `send_to_kindle()` to add more recipients.
+- **News Sources:** Edit the URLs in `news_to_kindle.py` or add new modules for additional sources.
+- **AI Prompts:** Modify prompts in the Gemini-related functions for different content styles.
+- **Recipients:** Edit the recipient list in `send_to_kindle()` or via your `.env`.
 - **Topics:** Update the GS1–GS4 lists in `upsc/` for new UPSC topics.
 
 ---
 
-## Requirements
-
-- Python 3.7+
-- Calibre (for `ebook-convert` and `calibre-smtp`)
-- Google Gemini API key
-
----
-
-## Troubleshooting
+## 🧪 Testing & Troubleshooting
 
 - **KeyError for Environment Variables:** Ensure your `.env` file is present and all keys are set.
 - **Calibre Not Found:** Double-check the `CALIBRE_PATH` in your `.env`.
 - **Email Issues:** Make sure your SMTP credentials are correct and your email provider allows SMTP access.
+- **Debugging:** Use logging and check the output files for errors or missing content.
 
 ---
 
-## License
+## 🤝 Contributing
 
-This project is for personal and educational use only.
+Contributions are welcome! Please open issues or submit pull requests for improvements, bug fixes, or new features.
+
+
+
+**Note:** Use responsibly and respect the terms of service of all third-party content providers.ail address, so your daily reading material is ready and waiting when you wake up—no manual steps required.
+
+With full customization options, you can choose your news sources, tweak AI prompts, and manage recipients. Whether you’re preparing for exams, staying informed, or just love reading, this project makes daily knowledge delivery effortless, reliable, and tailored to your interests.
 
 ---
 
-**Note:** Use responsibly and respect the terms of service of all third-party content providers.
+

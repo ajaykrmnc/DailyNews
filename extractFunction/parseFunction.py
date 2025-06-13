@@ -75,10 +75,17 @@ def saveImages(soup, img_path):
         img.insert_after(img_tag);
         img.decompose();
 
-def convert_file_to_epub(INITIAL_FILE, EPUB_FILE):
+def convert_file_to_epub(INITIAL_FILE, EPUB_FILE, COVER_FILE=None):
         calibre_path = os.path.join(CALIBRE_PATH, "ebook-convert")
         try:
-            subprocess.run([calibre_path, INITIAL_FILE, EPUB_FILE,"--language", "en", "--title", "Ajay Kumar"], check=True)
+            subprocess.run([calibre_path, 
+                            INITIAL_FILE, EPUB_FILE,
+                            "--language",  "en",
+                              "--cover", COVER_FILE,
+                              "--use-auto-toc",
+                              "--level1-toc", "//h2",
+                              "--authors", "Ajay Kumar"
+                            ], check=True)
         except Exception as e:
             print(f"Calibre failed to convert: {e}")
         print(f"EPUB saved at: {os.path.abspath(EPUB_FILE)}")

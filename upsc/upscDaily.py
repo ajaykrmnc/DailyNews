@@ -74,11 +74,9 @@ def upscDaily(GEMINI_API_KEY):
             f"Today is {today}.\n"
             "Compose a message to start the day that includes to the point \n"
             "- 1 essay for UPSC preparation in paragraph in about 500-1000 words\n"
-            "- 1 paragraph from any book which is much highlighted and important also interesting\n"
+            "- 1 paragraph from any book of 200 words which is much highlighted and important also interesting\n"
             "- 1 Gita paragraph with explanation based on today nth day of year so it must be nth paragraph according to index such that I get daily unique paragraph; you don't have to be exact but you don't have to explain why you choose that paragraph\n"
-            "- 1 Tech news in about 500 words\n"
             "- 1 motivational message for the day in about 100 words\n"
-            "- 1 story from a hindu mythology book like puran, vedas or upnishads"
             "Ensure the content is fresh, unique, and relevant to today's date. Format the response clearly and engagingly."
     )
     try:
@@ -88,5 +86,5 @@ def upscDaily(GEMINI_API_KEY):
     except Exception as e:
         print(e);
     epub_file = f"upsc/UPSC_AI-{today}.epub";
-    convert_file_to_epub(filename, epub_file);
+    convert_file_to_epub(filename, epub_file, f"upsc/UPSC_AI.png");
     send_to_kindle(epub_file);

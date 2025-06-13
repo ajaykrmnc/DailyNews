@@ -4,6 +4,7 @@ import subprocess
 import google.generativeai as genai
 import subprocess
 import os
+import logging
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
 from finance.financeDaily import financeDaily
@@ -24,11 +25,18 @@ FROM_EMAIL = os.environ["FROM_EMAIL"]
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 CALIBRE_PATH = os.environ["CALIBRE_PATH"]
 
+logging.basicConfig(
+    filename='error.log',
+    filemode='a',
+    level=logging.ERROR,
+    format='%(asctime)s %(levelname)s [%(module)s]: %(message)s'
+)
+
 DATE = datetime.today().strftime('%d-%b-%Y')
 YESTERDAY = (datetime.now() - timedelta(days=1)).strftime("%d-%m-%Y")
-MERGED_HTML = f"Editorial_Dev.html"
-EPUB_FILE3 = f"Finance-{DATE}.epub"
-EPUB_FILE5 = f"Editorial_Dev-{DATE}.epub"
+MERGED_HTML = f"Document/Editorial_Dev.html"
+EPUB_FILE3 = f"Document/Finance-{DATE}.epub"
+EPUB_FILE5 = f"Document/Editorial_Dev-{DATE}.epub"
 
 
 
@@ -59,7 +67,7 @@ if __name__ == "__main__":
     merge_content = get_html_merget(HTML_FILE4, HTML_FILE5)
     with open(MERGED_HTML, "w", encoding="utf-8") as f:
         f.write(merge_content)
-    convert_file_to_epub(MERGED_HTML, EPUB_FILE5)
+    convert_file_to_epub(MERGED_HTML, EPUB_FILE5, f"coverImages/thehindu.jpeg")
     send_to_kindle(EPUB_FILE5)
     techCrunch();
 
