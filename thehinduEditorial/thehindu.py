@@ -41,7 +41,7 @@ def get_hindu_editorial():
                     source.insert_after(img_tag)
                     source.decompose()
                 
-                img_folder = os.path.abspath(os.path.join(os.path.dirname(HTML_FILE4), "..", "images"))
+                img_folder = f"theHinduEditorial/images"
 
                 saveImages(soup, img_folder);
 
