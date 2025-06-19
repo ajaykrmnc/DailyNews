@@ -52,6 +52,7 @@ def techCrunch():
         for img in soup.find_all("img"):
             img_src = img.get("src")
             img_src_last = img_src.split("/")[-1] if img_src else ""
+            print(img_src_last);
             if img_src_last == "analytics":
                 img.decompose()
         for svg in soup.find_all("svg"):
@@ -78,9 +79,6 @@ def techCrunch():
         
         scraper = cloudscraper.create_scraper()
         response = scraper.get(entry.link, timeout=20)
-        
-            
-        
         
         # entry.content is usually a list of dicts with 'value' as the HTML content
         # print(html_string)
@@ -110,10 +108,10 @@ def techCrunch():
         </body>
         </html>
     """
-    with open(yourStory, "w", encoding="utf-8") as f:
+    with open(html_file, "w", encoding="utf-8") as f:
         f.write(html_content)
     epub_file = f"techCrunch/daily.epub"
-    convert_file_to_epub(yourStory, epub_file, f"techCrunch/techCrunch.png")
+    convert_file_to_epub(html_file, epub_file, f"techCrunch/techCrunch.png")
     send_to_kindle(epub_file);
  
-# techCrunch();
+techCrunch();
