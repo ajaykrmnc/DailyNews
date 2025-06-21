@@ -49,12 +49,6 @@ def techCrunch():
         for div in soup.find_all("div", class_="alsoread"):
             if div:
                 div.decompose();
-        for img in soup.find_all("img"):
-            img_src = img.get("src")
-            img_src_last = img_src.split("/")[-1] if img_src else ""
-            print(img_src_last);
-            if img_src_last == "analytics":
-                img.decompose()
         for svg in soup.find_all("svg"):
             if svg:
                 svg.decompose()
@@ -65,6 +59,11 @@ def techCrunch():
         img_path = f"techCrunch/images"
         img_full_path = os.path.abspath(img_path);
         saveImages(soup, img_full_path)
+        for img in soup.find_all("img"):
+            img_src = img.get("src")
+            img_src_last = img_src.split("/")[-1] if img_src else ""
+            if img_src_last == "analytics":
+                img.decompose()
         # Append the processed HTML to the article string
         article += str(soup)
     cnt = 0;

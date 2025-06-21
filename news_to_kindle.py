@@ -13,6 +13,7 @@ from devdutt.devdutt_post import get_devdutt_posts
 from thehinduEditorial.thehindu import get_hindu_editorial
 from dristiias.current_affairs import dristiIAS
 from techCrunch.techCrunch import techCrunch
+from ncert.onebyone import sendgeography
 from extractFunction.parseFunction import send_to_kindle, convert_file_to_epub
 
 load_dotenv()
@@ -61,7 +62,7 @@ def get_html_merget(HTML_FILE4, HTML_FILE5):
 if __name__ == "__main__":
     dristiIAS()
     # # financeDaily(CALIBRE_PATH=CALIBRE_PATH, GEMINI_API_KEY=GEMINI_API_KEY, EPUB_FILE3=EPUB_FILE3)
-    upscDaily(GEMINI_API_KEY)
+    # upscDaily(GEMINI_API_KEY)
     HTML_FILE4 = get_hindu_editorial()
     HTML_FILE5 = get_devdutt_posts()
     merge_content = get_html_merget(HTML_FILE4, HTML_FILE5)
@@ -70,5 +71,6 @@ if __name__ == "__main__":
     convert_file_to_epub(MERGED_HTML, EPUB_FILE5, f"coverImages/thehindu.jpeg")
     send_to_kindle(EPUB_FILE5)
     techCrunch();
+
 
 
