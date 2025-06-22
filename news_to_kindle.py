@@ -71,6 +71,7 @@ if __name__ == "__main__":
     convert_file_to_epub(MERGED_HTML, EPUB_FILE5, f"coverImages/thehindu.jpeg")
     send_to_kindle(EPUB_FILE5)
     techCrunch();
+    sendgeography();
 
 
 
