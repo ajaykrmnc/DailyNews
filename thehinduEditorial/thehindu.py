@@ -24,7 +24,6 @@ def get_hindu_editorial():
             if published_date == today:
                 response_html = requests.get(entry.link)
                 article = simple_json_from_html_string(response_html.text, use_readability=True)
-                article_file = f"thehinduEditorial/thehindu.json";
                 html_content = f"<h2>{article['title']}</h2>{article['content']}"
                 soup = BeautifulSoup(html_content, "html.parser")
                 for tag in soup.find_all(["a"]):
@@ -41,8 +40,7 @@ def get_hindu_editorial():
                     source.insert_after(img_tag)
                     source.decompose()
                 
-                img_folder = f"Document/images"
-
+                img_folder = os.path.abspath(os.path.join(os.path.dirname(HTML_FILE4), "..", "Document/images"))
                 saveImages(soup, img_folder);
 
                 if soup and response_html.status_code == 200:
