@@ -84,6 +84,7 @@ def convert_file_to_epub(INITIAL_FILE, EPUB_FILE, COVER_FILE=None):
                               "--cover", COVER_FILE,
                               "--use-auto-toc",
                               "--level1-toc", "//h:h2",
+                              "--epub-inline-toc",
                               "--authors", "Ajay Kumar"
                             ], check=True)
         except Exception as e:
