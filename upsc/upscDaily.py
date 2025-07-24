@@ -10,7 +10,7 @@ from google import genai
 import os
 from datetime import datetime
 import subprocess
-from extractFunction.parseFunction import send_to_kindle, saveImages, convert_file_to_epub
+from Utils.parseFunction import send_to_kindle, saveImages, convert_file_to_epub
 
 def extract_topics():
     today = datetime.today().strftime("%d-%m-%Y") 

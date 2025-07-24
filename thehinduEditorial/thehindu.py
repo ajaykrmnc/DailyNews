@@ -7,7 +7,7 @@ from readabilipy import simple_json_from_html_string
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from extractFunction.parseFunction import send_to_kindle, saveImages, convert_file_to_epub
+from Utils.parseFunction import send_to_kindle, saveImages, convert_file_to_epub
 HTML_FILE4 = f"thehinduEditorial/thehindu_editorial.html"
 
 def get_hindu_editorial():

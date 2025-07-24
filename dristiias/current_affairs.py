@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 load_dotenv()
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")));
-from extractFunction.parseFunction import send_to_kindle, removeClasses, saveImages, convert_file_to_epub
+from Utils.parseFunction import send_to_kindle, removeClasses, saveImages, convert_file_to_epub
 
 
 DATE = datetime.today().strftime('%d-%b-%Y')

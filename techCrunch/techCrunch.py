@@ -9,14 +9,14 @@ load_dotenv()
 from readabilipy import simple_json_from_html_string
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from extractFunction.parseFunction import saveImages, convert_file_to_epub, send_to_kindle
+from Utils.parseFunction import saveImages, convert_file_to_epub, send_to_kindle
 # Parse the RSS feed
 
 
 def techCrunch():
     feed_url = "https://techcrunch.com/feed/"
     feed_url2 = "https://yourstory.com/feed"
-    feed = feedparser.parse(feed_url2)
+    feed = feedparser.parse(feed_url)
 
     # Format today's articles
     # today = datetime.today().strftime('%Y-%m-%d')
@@ -28,7 +28,7 @@ def techCrunch():
     for entry in feed.entries:
         # Truncate the file before writing (overwrite mode)
         cnt += 1;
-        if(cnt >= 10):
+        if(cnt >= 5):
             break;
         # fetch the content of the article
         yourStory = f"techCrunch/yourStory.html";
@@ -67,7 +67,7 @@ def techCrunch():
         # Append the processed HTML to the article string
         article += str(soup)
     cnt = 0;
-    feed = feedparser.parse(feed_url)
+    feed = feedparser.parse(feed_url2)
     for entry in feed.entries:
         # Truncate the file before writing (overwrite mode)
         cnt += 1;
@@ -109,8 +109,9 @@ def techCrunch():
     """
     with open(html_file, "w", encoding="utf-8") as f:
         f.write(html_content)
-    epub_file = f"techCrunch/daily.epub"
-    convert_file_to_epub(html_file, epub_file, f"techCrunch/techCrunch.png")
+    DATE = datetime.today().strftime('%d-%b')
+    epub_file = f"techCrunch/Tech_{DATE}.epub"
+    convert_file_to_epub(html_file, epub_file, f"techCrunch/coverpage.png")
     send_to_kindle(epub_file);
  
 # techCrunch();

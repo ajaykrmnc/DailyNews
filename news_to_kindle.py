@@ -13,8 +13,8 @@ from devdutt.devdutt_post import get_devdutt_posts
 from thehinduEditorial.thehindu import get_hindu_editorial
 from dristiias.current_affairs import dristiIAS
 from techCrunch.techCrunch import techCrunch
-from ncert.onebyone import sendgeography
-from extractFunction.parseFunction import send_to_kindle, convert_file_to_epub
+from Books.Automate import sendgeography
+from Utils.parseFunction import send_to_kindle, convert_file_to_epub
 
 load_dotenv()
 
@@ -52,8 +52,8 @@ def get_html_merget(HTML_FILE4, HTML_FILE5):
         <meta charset='utf-8'>
       </head>
       <body>
-        {content1}
         {content2}
+        {content1}
       </body>
     </html>
     """
