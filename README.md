@@ -103,15 +103,18 @@ This will:
 - Generate EPUB files for Current Affairs, News, Finance, and UPSC
 - Email the EPUBs to your Kindle device
 
-### Today's headlines as Markdown (Obsidian)
+### Drishti IAS news analysis as Markdown (Obsidian)
 
 ```sh
 python3 today_news_md.py --out-dir "$HOME/notes/Daily News"
+python3 today_news_md.py --date 2026-11-03   # a specific day
 ```
 
-Fetches only stories published today from the RSS sources listed in `FEEDS` and writes
-`<out-dir>/YYYY-MM-DD.md`, overwriting it on each run. It uses only the Python standard
-library and needs no `.env`. The output folder can also be set with `DAILY_NEWS_DIR`.
+Converts the Drishti IAS daily news analysis page to `<out-dir>/YYYY-MM-DD.md`, named after
+the page's date. Without `--date` it fetches today's page, falling back to the latest page
+from the previous three days (Drishti publishes later in the day and skips Sundays). Each run
+overwrites the note. It uses only the Python standard library and needs no `.env`. The output
+folder can also be set with `DAILY_NEWS_DIR`.
 
 ---
 
