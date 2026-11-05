@@ -112,9 +112,16 @@ python3 today_news_md.py --date 2026-11-03   # a specific day
 
 Converts the Drishti IAS daily news analysis page to `<out-dir>/YYYY-MM-DD.md`, named after
 the page's date. Without `--date` it fetches today's page, falling back to the latest page
-from the previous three days (Drishti publishes later in the day and skips Sundays). Each run
-overwrites the note. It uses only the Python standard library and needs no `.env`. The output
-folder can also be set with `DAILY_NEWS_DIR`.
+from the previous three days (Drishti publishes later in the day and skips Sundays). A day
+whose note already exists is reused without downloading it again; pass `--refresh` to
+re-download and overwrite it. It uses only the Python standard library and needs no `.env`.
+The output folder can also be set with `DAILY_NEWS_DIR`.
+
+Each note starts with a linked topic index and previous/next links to the neighbouring days.
+Topics are `##` headings with category, importance, `#GS1`–`#GS4` tags and keywords; the
+Prelims/Mains syllabus, summary and practice questions are callouts, and FAQs and previous
+year questions are folded. `Daily News.md` in the same folder is regenerated as a hub listing
+every day and its topics.
 
 ---
 
