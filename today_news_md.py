@@ -3,25 +3,30 @@
 
 Fetches today's page, falling back to the latest page from the previous few days when
 today's is not published yet. A day whose note already exists is not downloaded again
-unless --refresh is given. Each note gets a topic index and previous/next links, and
+unless --refresh is given, except today's and yesterday's, which Drishti is still
+filling in and are fetched again. Each note gets a topic index and previous/next links, and
 the folder's hub note lists every day. Uses only the standard library so it runs from
 Obsidian with the system python3.
 """
 
 import argparse
 import html
+import json
 import os
 import re
 import sys
 import urllib.request
 from datetime import date, datetime, timedelta
 from html.parser import HTMLParser
-from urllib.parse import urljoin
+from urllib.parse import quote as url_quote, urlencode, urljoin
 
 PAGE_URL = "https://www.drishtiias.com/current-affairs-news-analysis-editorials/news-analysis/{}"
 DEFAULT_OUT_DIR = os.path.join(os.path.expanduser("~"), "notes", "Daily News")
 USER_AGENT = "Mozilla/5.0 (DailyNews today_news_md)"
 FALLBACK_DAYS = 3
+# Drishti keeps adding topics to a day's page into the next day, so saved notes this
+# recent are downloaded again rather than reused.
+RECHECK_DAYS = 1
 HUB_NOTE = "Daily News.md"
 HUB_DAYS_WITH_TOPICS = 30
 NOTE_NAME = re.compile(r"^(\d{4}-\d{2}-\d{2})\.md$")
@@ -49,6 +54,18 @@ SERIES_TAGS = {
     "rapid fire ca", "rapid fire", "quick facts for prelims", "important facts for prelims",
     "facts for upsc mains", "prelims facts", "mains facts",
 }
+WIKI_API = "https://en.wikipedia.org/w/api.php"
+WIKI_ARTICLE = "https://en.wikipedia.org/wiki/{}"
+WIKI_SEARCH = "https://en.wikipedia.org/wiki/Special:Search?{}"
+WIKI_BATCH = 50
+DRISHTI_LINK = re.compile(
+    r"(?<!!)\[([^\]]+)\]\((https?://(?:www\.)?(?:drishtiias\.com/|google\.com/search\?)[^)\s]*)\)"
+)
+# Bare clause titles such as "Article 19(1)(a)" match unrelated articles, so they are searched.
+CONSTITUTION_ARTICLE = re.compile(r"^Articles? \d", re.I)
+IMAGE_URL = re.compile(r"/images/|\.(?:png|jpe?g|gif|webp|svg|pdf)(?:\?|$)", re.I)
+GENERIC_LINK_TEXT = re.compile(r"^(?:read more|click here|here|link|more|source|drishti(?: ias)?)$", re.I)
+ACRONYM = re.compile(r"(?=(?:.*[A-Z]){2})[A-Z][A-Za-z0-9&.-]{1,11}")
 
 
 class Node:
@@ -470,6 +487,100 @@ def fetch(url):
         return response.read().decode("utf-8", errors="replace")
 
 
+def sentence_case(text):
+    words = text.split(" ")
+    return " ".join(
+        [words[0]] + [w if w.isupper() or re.search(r"\d", w) else w.lower() for w in words[1:]]
+    )
+
+
+def wiki_candidates(text):
+    """Likely Wikipedia titles for a link's text, best first."""
+    text = re.sub(r"</?u>|\*+|\\", "", text)
+    text = re.sub(r"\s*[-|:]\s*Drishti(?: IAS)?$", "", text, flags=re.I)
+    text = clean_text(text.replace("_", " ")).strip(" ,.;:")
+    while text.endswith(")") and text.count(")") > text.count("("):
+        text = text[:-1].rstrip(" ,")
+    if CONSTITUTION_ARTICLE.match(text):
+        return []
+    # Only parentheticals after a space are asides; "Article 15(3)" keeps its clause.
+    bare = clean_text(re.sub(r"\s+\([^)]*\)", " ", re.sub(r"['’]s\b", "", text))).strip(" ,")
+    names = [text, bare, bare.split(",")[0].strip()]
+    names += [inner for inner in re.findall(r"\(([^)]+)\)", text) if ACRONYM.fullmatch(inner)]
+    names += [sentence_case(name) for name in names]
+    return [n for n in dict.fromkeys(names) if n and not re.search(r"[#<>\[\]{}|]", n)]
+
+
+def wikipedia_titles(names):
+    """Map each name to the article it resolves to, following redirects and skipping disambiguation pages."""
+    found = {}
+    names = list(dict.fromkeys(names))
+    for start in range(0, len(names), WIKI_BATCH):
+        batch = names[start:start + WIKI_BATCH]
+        query = urlencode({
+            "action": "query", "format": "json", "formatversion": 2, "redirects": 1,
+            "prop": "pageprops", "ppprop": "disambiguation", "titles": "|".join(batch),
+        })
+        try:
+            result = json.loads(fetch(f"{WIKI_API}?{query}")).get("query", {})
+        except Exception as err:
+            print(f"Wikipedia lookup failed: {type(err).__name__}: {err}", file=sys.stderr)
+            continue
+        normalized = {r["from"]: r["to"] for r in result.get("normalized", [])}
+        redirects = {r["from"]: (r["to"], r.get("tofragment")) for r in result.get("redirects", [])}
+        articles = {
+            page["title"] for page in result.get("pages", [])
+            if not page.get("missing") and not page.get("invalid")
+            and "disambiguation" not in page.get("pageprops", {})
+        }
+        for name in batch:
+            title, fragment = normalized.get(name, name), None
+            for _ in range(5):
+                if title not in redirects:
+                    break
+                title, fragment = redirects[title]
+            if title in articles:
+                found[name] = (title, fragment)
+    return found
+
+
+def wikipedia_url(title, fragment=None):
+    url = WIKI_ARTICLE.format(url_quote(title.replace(" ", "_"), safe="_,:/'"))
+    return url + (f"#{url_quote(fragment.replace(' ', '_'), safe='_.:')}" if fragment else "")
+
+
+def link_to_wikipedia(topics):
+    """Point the body's links to other Drishti articles at Wikipedia instead.
+
+    A link whose text names no Wikipedia article opens a Wikipedia search for it.
+    Image links and generic text such as "Read more" keep their Drishti target.
+    """
+    def wanted(match):
+        return not IMAGE_URL.search(match.group(2)) and not GENERIC_LINK_TEXT.match(match.group(1).strip("* "))
+
+    texts = {
+        m.group(1) for topic in topics for block in topic.body
+        for m in DRISHTI_LINK.finditer(block) if wanted(m)
+    }
+    options = {text: wiki_candidates(text) for text in texts}
+    found = wikipedia_titles(name for names in options.values() for name in names)
+
+    def replace(match):
+        if not wanted(match):
+            return match.group(0)
+        text = match.group(1)
+        hit = next((found[name] for name in options[text] if name in found), None)
+        if hit:
+            return f"[{text}]({wikipedia_url(*hit)})"
+        search = (options[text] or [clean_text(re.sub(r"\*+", "", text)).strip(" ,.;:")])[0]
+        if CONSTITUTION_ARTICLE.match(search) and "constitution" not in search.lower():
+            search += " Constitution of India"
+        return f"[{text}]({WIKI_SEARCH.format(urlencode({'search': search, 'go': 'Go'}))})"
+
+    for topic in topics:
+        topic.body = [DRISHTI_LINK.sub(replace, block) for block in topic.body]
+
+
 def drishti_topics(day):
     url = PAGE_URL.format(day.strftime("%d-%m-%Y"))
     root = parse_html(fetch(url))
@@ -481,6 +592,7 @@ def drishti_topics(day):
             topic = parse_topic(renderer, category, detail)
             if topic:
                 topics.append(topic)
+    link_to_wikipedia(topics)
     return url, topics
 
 
@@ -602,20 +714,27 @@ def main():
     # Drishti publishes later in the day and skips Sundays, so fall back a few days.
     candidates = [args.date] if args.date else [today - timedelta(days=n) for n in range(FALLBACK_DAYS + 1)]
 
-    # Newest first: a saved note is used as is; only missing days are downloaded.
+    # Newest first: an older saved note is used as is; missing and recent days are
+    # downloaded, keeping the saved note when the download fails or comes back empty.
     for day in candidates:
         path = os.path.join(args.out_dir, f"{day.isoformat()}.md")
-        if os.path.exists(path) and not args.refresh:
+        saved = os.path.exists(path)
+        if saved and not args.refresh and (today - day).days > RECHECK_DAYS:
             print(path)
             return 0
         try:
             url, topics = drishti_topics(day)
         except Exception as err:
             print(f"{day}: {type(err).__name__}: {err}", file=sys.stderr)
-            continue
+            topics = []
+            url = None
         if topics:
             break
-        print(f"{day}: no Drishti IAS news analysis published yet ({url})", file=sys.stderr)
+        if saved:
+            print(path)
+            return 0
+        if url:
+            print(f"{day}: no Drishti IAS news analysis published yet ({url})", file=sys.stderr)
     else:
         return 1
 
