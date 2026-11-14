@@ -127,7 +127,8 @@ every day and its topics.
 
 Links in the article text that point to other Drishti pages are pointed at Wikipedia instead.
 The link text is looked up as a Wikipedia title (following redirects, skipping disambiguation
-pages); names with no matching article link to a Wikipedia search. Each topic's `Drishti` link
+pages); names with no matching article link to Wikipedia's first search result for them, and
+to the search page only when the search finds nothing. Each topic's `Drishti` link
 and its news source links are kept.
 
 ---

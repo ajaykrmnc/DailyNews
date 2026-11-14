@@ -15,7 +15,10 @@ import json
 import os
 import re
 import sys
+import time
+import urllib.error
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, timedelta
 from html.parser import HTMLParser
 from urllib.parse import quote as url_quote, urlencode, urljoin
@@ -58,6 +61,11 @@ WIKI_API = "https://en.wikipedia.org/w/api.php"
 WIKI_ARTICLE = "https://en.wikipedia.org/wiki/{}"
 WIKI_SEARCH = "https://en.wikipedia.org/wiki/Special:Search?{}"
 WIKI_BATCH = 50
+# Wikimedia throttles anonymous API clients without an identifying user agent and answers
+# bursts with HTTP 429, so searches run a few at a time and are retried after a pause.
+WIKI_USER_AGENT = "DailyNews-today_news_md/1.0 (https://github.com/ajaykrmnc/DailyNews)"
+WIKI_RETRIES = 3
+WIKI_SEARCH_WORKERS = 4
 DRISHTI_LINK = re.compile(
     r"(?<!!)\[([^\]]+)\]\((https?://(?:www\.)?(?:drishtiias\.com/|google\.com/search\?)[^)\s]*)\)"
 )
@@ -517,12 +525,11 @@ def wikipedia_titles(names):
     names = list(dict.fromkeys(names))
     for start in range(0, len(names), WIKI_BATCH):
         batch = names[start:start + WIKI_BATCH]
-        query = urlencode({
-            "action": "query", "format": "json", "formatversion": 2, "redirects": 1,
-            "prop": "pageprops", "ppprop": "disambiguation", "titles": "|".join(batch),
-        })
         try:
-            result = json.loads(fetch(f"{WIKI_API}?{query}")).get("query", {})
+            result = wiki_api({
+                "action": "query", "format": "json", "formatversion": 2, "redirects": 1,
+                "prop": "pageprops", "ppprop": "disambiguation", "titles": "|".join(batch),
+            }).get("query", {})
         except Exception as err:
             print(f"Wikipedia lookup failed: {type(err).__name__}: {err}", file=sys.stderr)
             continue
@@ -549,11 +556,43 @@ def wikipedia_url(title, fragment=None):
     return url + (f"#{url_quote(fragment.replace(' ', '_'), safe='_.:')}" if fragment else "")
 
 
+def wiki_api(params):
+    request = urllib.request.Request(f"{WIKI_API}?{urlencode(params)}", headers={"User-Agent": WIKI_USER_AGENT})
+    for attempt in range(WIKI_RETRIES + 1):
+        try:
+            with urllib.request.urlopen(request, timeout=30) as response:
+                return json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as err:
+            if err.code != 429 or attempt == WIKI_RETRIES:
+                raise
+            wait = err.headers.get("Retry-After", "")
+            time.sleep(min(int(wait), 30) if wait.isdigit() else 2 ** attempt)
+
+
+def wikipedia_top_results(queries):
+    """Map each query to the title of Wikipedia's first search result, when there is one."""
+    def top(query):
+        try:
+            hits = wiki_api({
+                "action": "query", "format": "json", "formatversion": 2,
+                "list": "search", "srsearch": query, "srlimit": 1, "srprop": "",
+            }).get("query", {}).get("search", [])
+        except Exception as err:
+            print(f"Wikipedia search failed for {query!r}: {type(err).__name__}: {err}", file=sys.stderr)
+            return None
+        return hits[0]["title"] if hits else None
+
+    queries = list(dict.fromkeys(queries))
+    with ThreadPoolExecutor(max_workers=WIKI_SEARCH_WORKERS) as pool:
+        return {q: title for q, title in zip(queries, pool.map(top, queries)) if title}
+
+
 def link_to_wikipedia(topics):
     """Point the body's links to other Drishti articles at Wikipedia instead.
 
-    A link whose text names no Wikipedia article opens a Wikipedia search for it.
-    Image links and generic text such as "Read more" keep their Drishti target.
+    A link whose text names no Wikipedia article goes to Wikipedia's first search result
+    for it, or to the search page when the search finds nothing. Image links and generic
+    text such as "Read more" keep their Drishti target.
     """
     def wanted(match):
         return not IMAGE_URL.search(match.group(2)) and not GENERIC_LINK_TEXT.match(match.group(1).strip("* "))
@@ -565,17 +604,27 @@ def link_to_wikipedia(topics):
     options = {text: wiki_candidates(text) for text in texts}
     found = wikipedia_titles(name for names in options.values() for name in names)
 
-    def replace(match):
-        if not wanted(match):
-            return match.group(0)
-        text = match.group(1)
+    def search_query(text):
+        query = (options[text] or [clean_text(re.sub(r"\*+", "", text)).strip(" ,.;:")])[0]
+        if CONSTITUTION_ARTICLE.match(query) and "constitution" not in query.lower():
+            query += " Constitution of India"
+        return query
+
+    targets = {}
+    unresolved = {}
+    for text in texts:
         hit = next((found[name] for name in options[text] if name in found), None)
         if hit:
-            return f"[{text}]({wikipedia_url(*hit)})"
-        search = (options[text] or [clean_text(re.sub(r"\*+", "", text)).strip(" ,.;:")])[0]
-        if CONSTITUTION_ARTICLE.match(search) and "constitution" not in search.lower():
-            search += " Constitution of India"
-        return f"[{text}]({WIKI_SEARCH.format(urlencode({'search': search, 'go': 'Go'}))})"
+            targets[text] = wikipedia_url(*hit)
+        else:
+            unresolved[text] = search_query(text)
+    top = wikipedia_top_results(unresolved.values())
+    for text, query in unresolved.items():
+        title = top.get(query)
+        targets[text] = wikipedia_url(title) if title else WIKI_SEARCH.format(urlencode({"search": query, "go": "Go"}))
+
+    def replace(match):
+        return f"[{match.group(1)}]({targets[match.group(1)]})" if wanted(match) else match.group(0)
 
     for topic in topics:
         topic.body = [DRISHTI_LINK.sub(replace, block) for block in topic.body]
