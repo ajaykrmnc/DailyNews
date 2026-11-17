@@ -103,6 +103,26 @@ This will:
 - Generate EPUB files for Current Affairs, News, Finance, and UPSC
 - Email the EPUBs to your Kindle device
 
+### The Hindu editorials as Markdown (Obsidian)
+
+```sh
+python3 today_hindu_md.py --out-dir "$HOME/notes/The Hindu Editorial"
+python3 today_hindu_md.py --refresh
+python3 today_hindu_md.py --date 2026-11-14
+```
+
+Uses only the Python standard library and the shared Markdown renderer in
+`today_news_md.py`. Fetches the latest published day from the editorial RSS feed,
+saves dated notes and an index with folder-qualified navigation links, and
+rechecks today's and yesterday's notes for updates. Older notes are reused unless
+`--refresh` is passed. `--date` can fetch only dates still in the rolling RSS feed.
+On network failure, an existing note opens without being replaced. Public article
+text is saved when available; otherwise the note contains a labeled RSS preview
+and a source link. The publisher may require a subscription for the complete text.
+The shared Obsidian config binds fetch to `Space o h` and refresh to `Space o H`.
+
+Run focused tests with `python3 -m unittest discover -s tests`.
+
 ### Drishti IAS news analysis as Markdown (Obsidian)
 
 ```sh
