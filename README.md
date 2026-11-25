@@ -103,6 +103,27 @@ This will:
 - Generate EPUB files for Current Affairs, News, Finance, and UPSC
 - Email the EPUBs to your Kindle device
 
+### The Economist articles as Markdown (Obsidian)
+
+```sh
+python3 today_economist_md.py --out-dir "$HOME/notes/The Economist"
+python3 today_economist_md.py --refresh
+python3 today_economist_md.py --date 2026-11-17
+```
+
+Uses `https://www.economist.com/latest/rss.xml` and only the Python standard
+library. Saves all articles for the latest publication date as RSS previews:
+headlines, summaries, and source links. Dates are grouped in Indian Standard Time.
+Full articles are not downloaded and may require a subscription. Recent notes
+(today and yesterday) are refreshed on each fetch; use `--refresh` to refresh
+older saved dates while they remain in the rolling feed. A network failure opens
+an existing saved note without replacing it. Notes include an index and navigation
+links qualified by folder to avoid collisions with other daily notes.
+
+In Obsidian, `Space o E` fetches, **Refresh The Economist articles** in the command
+palette refreshes, and `[d` / `]d` navigate Economist days. Lowercase `Space o e`
+remains the file explorer shortcut.
+
 ### The Hindu editorials as Markdown (Obsidian)
 
 ```sh

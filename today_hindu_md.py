@@ -15,13 +15,13 @@ from urllib.parse import urlsplit
 
 from today_news_md import (
     MarkdownRenderer, clean_text, fetch, heading_ref, heading_text, note_days,
-    parse_day, parse_html, plain_text, read, write_if_changed,
+    parse_day, parse_html, plain_text, write_if_changed,
 )
+from rss_notes import NAV_MARK, update_index as update_rss_index
 
 FEED_URL = "https://www.thehindu.com/opinion/editorial/feeder/default.rss"
 IST = timezone(timedelta(hours=5, minutes=30))
 FOLDER = "The Hindu Editorial"
-NAV_MARK = "%%nav%%"
 
 
 def editorial_url(url):
@@ -92,23 +92,8 @@ def render_note(day, entries):
 
 
 def update_index(out_dir):
-    days = note_days(out_dir)
-    # Include the folder in links: Drishti notes use the same date filenames.
-    folder = os.path.basename(os.path.normpath(out_dir))
-    for i, day in enumerate(days):
-        links = []
-        if i:
-            links.append(f"[[{folder}/{days[i - 1]}|← {days[i - 1]}]]")
-        links.append(f"[[{folder}/{FOLDER}|All days]]")
-        if i + 1 < len(days):
-            links.append(f"[[{folder}/{days[i + 1]}|{days[i + 1]} →]]")
-        target = os.path.join(out_dir, f"{day}.md")
-        lines = read(target).split("\n")
-        lines = [NAV_MARK + " " + " · ".join(links) if line.startswith(NAV_MARK) else line for line in lines]
-        write_if_changed(target, "\n".join(lines))
-    lines = [f"# {FOLDER}", "", "Press `Space o h` to fetch the latest editorials; `Space o H` to refresh.", ""]
-    lines += [f"- [[{folder}/{day}|{day}]]" for day in reversed(days)]
-    write_if_changed(os.path.join(out_dir, f"{FOLDER}.md"), "\n".join(lines) + "\n")
+    update_rss_index(out_dir, FOLDER,
+                     "Press `Space o h` to fetch the latest editorials; `Space o H` to refresh.")
 
 
 def main(argv=None):
